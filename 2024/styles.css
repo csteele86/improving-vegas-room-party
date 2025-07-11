@@ -1,0 +1,77 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body, html {
+    height: 100%;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+  
+  .container {
+    text-align: center;
+    padding: 2em;
+    position: relative;
+    z-index: 10;
+  }
+  
+  header {
+    margin-bottom: 2em;
+  }
+  
+  h1 {
+    font-size: 2.5em;
+    color: #fff;
+  }
+  
+  p {
+    font-size: 1.2em;
+    color: #fff;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #ff6f61;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 1em;
+  }
+  
+  button:hover {
+    background-color: #ff4e3c;
+  }
+  
+  /* Rave light animation */
+  body.active-background {
+    background: radial-gradient(circle, #ff0040, #ff8000, #ffbf00, #00ff80, #00bfff, #ff00ff);
+    background-size: 200% 200%;
+    animation: rave-lights 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes rave-lights {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 50% 50%; }
+  }
+  
+  footer {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    color: #fff;
+  }
+  
+  .details {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 2em;
+    border-radius: 10px;
+  }
+  
+  body.inactive-background {
+    background-color: #000;
+  }
+  

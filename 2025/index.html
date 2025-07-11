@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎧 Late Night Suite Party – Vegas 2025</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073; }
+            50% { text-shadow: 0 0 15px #fff, 0 0 25px #ff4da6, 0 0 35px #ff4da6, 0 0 45px #ff4da6; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .glow-text {
+            animation: glow 2s ease-in-out infinite;
+        }
+        .flicker {
+            animation: flicker 3s ease-in-out infinite;
+        }
+        .pulse-hover:hover {
+            animation: pulse 1s infinite;
+        }
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="text-white font-['Poppins'] flex flex-col min-h-screen">
+    <main class="flex-1 container mx-auto px-4 py-12 flex flex-col items-center justify-center text-center">
+        <h1 class="text-4xl md:text-6xl font-bold mb-6 font-['Permanent_Marker'] text-pink-500 glow-text">
+            🎧 Vegas Room Party - 2025 🎉
+        </h1>
+        
+        <div class="max-w-2xl mx-auto bg-black/30 backdrop-blur-sm rounded-2xl p-8 mb-8 border border-pink-500/30 shadow-lg shadow-pink-500/20 flicker">
+            <p class="text-lg md:text-xl mb-8 leading-relaxed">
+                After the Thursday night activities wrap up... the fun gets even better! Join us in our decked-out suite for music, lights, drinks, and good vibes. You don't want to miss this!
+            </p>
+            
+            <div class="mt-6 mb-8">
+                <div id="rsvpCounter" class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500">
+                    🌟 <span id="count">0</span> Improvers are in!
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button id="rsvpIn" class="px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full font-bold text-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-pink-500/30 pulse-hover">
+                        ✅ Count Me In!
+                    </button>
+                    <button id="rsvpOut" class="px-8 py-3 bg-gradient-to-r from-gray-600 to-gray-700 rounded-full font-bold text-lg hover:from-gray-700 hover:to-gray-800 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-gray-500/20 pulse-hover">
+                        ❌ Nevermind
+                    </button>
+                </div>
+                <div id="loading" class="mt-4 text-cyan-300 hidden">
+                    Loading...
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-8 text-sm text-gray-400">
+            <p>Hosted by Jem & Steele | Thursday night after your event | Planet Hollywood | Stay-tuned for a room #</p>
+        </div>
+    </main>
+
+    <script>
+        // Replace with your MockAPI endpoint
+        const API_URL = 'https://68700fea7ca4d06b34b5dfa1.mockapi.io/api/improving-vegas/2025/rsvps';
+        const STORAGE_KEY = 'vegasPartyRSVP';
+        
+        // DOM Elements
+        const countElement = document.getElementById('count');
+        const rsvpInBtn = document.getElementById('rsvpIn');
+        const rsvpOutBtn = document.getElementById('rsvpOut');
+        const loadingElement = document.getElementById('loading');
+        
+        let rsvpId = localStorage.getItem(STORAGE_KEY);
+        let rsvps = [];
+        
+        // Initialize the page
+        async function init() {
+            try {
+                loadingElement.classList.remove('hidden');
+                const response = await fetch(API_URL);
+                rsvps = await response.json();
+                updateUI();
+            } catch (error) {
+                console.error('Error fetching RSVPs:', error);
+                rsvps = [];
+            } finally {
+                loadingElement.classList.add('hidden');
+            }
+            
+            setupEventListeners();
+        }
+        
+        function setupEventListeners() {
+            rsvpInBtn.addEventListener('click', () => updateRSVP(true));
+            rsvpOutBtn.addEventListener('click', () => updateRSVP(false));
+            updateButtonStates();
+        }
+        
+        function updateButtonStates() {
+            const hasActiveRSVP = !!rsvpId && rsvps.some(r => r === rsvpId);
+            
+            rsvpInBtn.disabled = hasActiveRSVP;
+            rsvpOutBtn.disabled = !hasActiveRSVP;
+            
+            if (hasActiveRSVP) {
+                rsvpInBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                rsvpOutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                rsvpInBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                rsvpOutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+        
+        async function updateRSVP(isAdding) {
+            try {
+                loadingElement.classList.remove('hidden');
+                
+                if (isAdding && !rsvpId) {
+                    // Create a new RSVP
+                    const newRSVP = {
+                    };
+                    
+                    // Send to server
+                    try {
+                        const response = await fetch(API_URL, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(newRSVP)
+                        });
+                        
+                        if (!response.ok) throw new Error('Failed to create RSVP');
+                        
+                        // Update with server's version of the RSVP
+                        const serverRSVP = await response.json();
+                        rsvpId = serverRSVP.id; // In case server generated a different ID
+                        localStorage.setItem(STORAGE_KEY, rsvpId);
+                        rsvps.push(rsvpId);
+                        updateUI();
+                        updateButtonStates();
+                        
+                    } catch (error) {
+                        console.error('Error creating RSVP:', error);
+                        // Revert optimistic update on error
+                        rsvps = rsvps.filter(r => r !== rsvpId);
+                        rsvpId = null;
+                        localStorage.removeItem(STORAGE_KEY);
+                    }
+                    
+                } else if (!isAdding) {
+                    // Try to find the RSVP to delete
+                    let rsvpToDelete = rsvpId;
+                    
+                    // If we don't have an RSVP ID, try to find it in the server data
+                    if (!rsvpToDelete && rsvps.length > 0) {
+                        // Try to find the user's RSVP by some identifier (like IP or user agent)
+                        // For now, we'll just take the first one that matches the stored ID
+                        const storedId = localStorage.getItem(STORAGE_KEY);
+                        if (storedId) {
+                            const userRSVP = rsvps.find(r => r === storedId);
+                            if (userRSVP) {
+                                rsvpToDelete = userRSVP;
+                            }
+                        }
+                    }
+                    
+                    if (!rsvpToDelete) {
+                        console.log('No RSVP found to delete');
+                        return;
+                    }
+                    
+                    // Optimistically update UI
+                    rsvps = rsvps.filter(r => r !== rsvpToDelete);
+                    rsvpId = null;
+                    localStorage.removeItem(STORAGE_KEY);
+                    updateUI();
+                    updateButtonStates();
+                    
+                    // Delete from server
+                    try {
+                        const response = await fetch(`${API_URL}/${rsvpToDelete}`, {
+                            method: 'DELETE'
+                        });
+                        
+                        if (!response.ok) {
+                            // If delete fails with 404, the RSVP might have been deleted already
+                            if (response.status !== 404) {
+                                throw new Error('Failed to delete RSVP');
+                            }
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error deleting RSVP:', error);
+                        // We'll keep the optimistic update since we can't be sure of the server state
+                        // The next refresh will sync with the server
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error in updateRSVP:', error);
+            } finally {
+                loadingElement.classList.add('hidden');
+            }
+        }
+        
+        function updateUI() {
+            const count = rsvps.length;
+            countElement.textContent = count;
+            
+            // Add animation class temporarily when count changes
+            const counter = document.getElementById('rsvpCounter');
+            counter.classList.add('scale-110');
+            setTimeout(() => {
+                counter.classList.remove('scale-110');
+            }, 300);
+        }
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
