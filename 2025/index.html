@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎧 Late Night Suite Party – Vegas 2025</title>
+    <title>🎧 Vegas Room Party – 2025 🎉</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -14,6 +14,17 @@
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
+        }
+        
+        /* Smooth animation for pulsing in and out */
+        @keyframes pulseIn {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .animate-pulse-in {
+            animation: pulseIn 0.8s ease-in-out forwards;
         }
         @keyframes flicker {
             0%, 100% { opacity: 1; }
@@ -40,14 +51,24 @@
             🎧 Vegas Room Party - 2025 🎉
         </h1>
         
-        <div class="max-w-2xl mx-auto bg-black/30 backdrop-blur-sm rounded-2xl p-8 mb-8 border border-pink-500/30 shadow-lg shadow-pink-500/20 flicker">
+        <div class="max-w-2xl mx-auto bg-black/30 backdrop-blur-sm rounded-2xl p-8 mb-6 border border-pink-500/30 shadow-lg shadow-pink-500/20 flicker">
             <p class="text-lg md:text-xl mb-8 leading-relaxed">
                 After the Thursday night activities wrap up... the fun gets even better! Join us in our decked-out suite for music, lights, drinks, and good vibes. You don't want to miss this!
             </p>
             
             <div class="mt-6 mb-8">
-                <div id="rsvpCounter" class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500">
-                    🌟 <span id="count">0</span> Improvers are in!
+                <div id="rsvpSection" class="hidden transition-all duration-500">
+                    <div class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500">
+                        🌟 <span id="count">0</span> Improvers are in! 🌟 
+                    </div>
+                </div>
+                <div id="rsvpdSection" class="hidden transition-all duration-500">
+                    <div class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500">
+                        🎉 You are in! 🎉
+                    </div>
+                    <div class="text-lg mb-6">
+                        Along with <span id="count2">0</span> Improvers! 
+                    </div>
                 </div>
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -64,21 +85,43 @@
             </div>
         </div>
         
-        <div class="mt-8 text-sm text-gray-400">
-            <p>Hosted by Jem & Steele | Thursday night after your event | Planet Hollywood | Stay-tuned for a room #</p>
+        <div class="bg-gradient-to-r from-purple-900/60 to-pink-900/60 backdrop-blur-sm p-4 rounded-xl border border-pink-500/40 shadow-lg shadow-pink-500/20">
+            <h3 class="text-xl font-bold text-cyan-300 mb-2">Event Details</h3>
+            <div class="flex flex-col md:flex-row justify-center gap-4 text-white">
+                <div class="flex items-center justify-center">
+                    <span class="text-pink-400 mr-2">👥</span>
+                    <span class="font-semibold">Hosted by:</span>
+                    <span class="ml-2 text-cyan-200">Jem & Steele</span>
+                </div>
+                <div class="flex items-center justify-center">
+                    <span class="text-pink-400 mr-2">🕒</span>
+                    <span class="font-semibold">When:</span>
+                    <span class="ml-2 text-cyan-200">Thursday night after your event</span>
+                </div>
+                <div class="flex items-center justify-center">
+                    <span class="text-pink-400 mr-2">🏨</span>
+                    <span class="font-semibold">Room:</span>
+                    <span id="roomNumber" class="ml-2 text-cyan-200 glow-text">Stay-tuned</span>
+                </div>
+            </div>
         </div>
     </main>
 
     <script>
-        // Replace with your MockAPI endpoint
+        // API endpoints
         const API_URL = 'https://68700fea7ca4d06b34b5dfa1.mockapi.io/api/improving-vegas/2025/rsvps';
+        const ROOM_API_URL = 'https://68700fea7ca4d06b34b5dfa1.mockapi.io/api/improving-vegas/2025/room';
         const STORAGE_KEY = 'vegasPartyRSVP';
         
         // DOM Elements
         const countElement = document.getElementById('count');
+        const countElement2 = document.getElementById('count2');
         const rsvpInBtn = document.getElementById('rsvpIn');
         const rsvpOutBtn = document.getElementById('rsvpOut');
         const loadingElement = document.getElementById('loading');
+        const roomNumberElement = document.getElementById('roomNumber');
+        const rsvpSection = document.getElementById('rsvpSection');
+        const rsvpdSection = document.getElementById('rsvpdSection');
         
         let rsvpId = localStorage.getItem(STORAGE_KEY);
         let rsvps = [];
@@ -87,17 +130,52 @@
         async function init() {
             try {
                 loadingElement.classList.remove('hidden');
-                const response = await fetch(API_URL);
-                rsvps = await response.json();
+                
+                // Fetch RSVPs
+                const rsvpResponse = await fetch(API_URL);
+                const rsvpData = await rsvpResponse.json();
+                // Only store an array of the "id" fields
+                rsvps = rsvpData.map(rsvp => rsvp.id);
                 updateUI();
+                
+                // Fetch room number
+                await fetchRoomNumber();
+                
             } catch (error) {
-                console.error('Error fetching RSVPs:', error);
+                console.error('Error in initialization:', error);
                 rsvps = [];
             } finally {
                 loadingElement.classList.add('hidden');
             }
             
             setupEventListeners();
+        }
+        
+        // Fetch room number from the API
+        async function fetchRoomNumber() {
+            try {
+                const response = await fetch(ROOM_API_URL);
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch room data');
+                }
+                
+                const roomData = await response.json();
+                
+                // Check if we have room data and it has a number property
+                if (roomData && roomData.length > 0 && roomData[0].number) {
+                    const roomNumber = roomData[0].number;
+                    roomNumberElement.textContent = `Room ${roomNumber}`;
+                    roomNumberElement.classList.add('text-xl');
+                } else {
+                    roomNumberElement.textContent = 'Stay-tuned';
+                    roomNumberElement.classList.remove('text-xl');
+                }
+            } catch (error) {
+                console.error('Error fetching room number:', error);
+                roomNumberElement.textContent = 'Stay-tuned';
+                roomNumberElement.classList.remove('text-xl');
+            }
         }
         
         function setupEventListeners() {
@@ -113,11 +191,19 @@
             rsvpOutBtn.disabled = !hasActiveRSVP;
             
             if (hasActiveRSVP) {
+                rsvpdSection.classList.remove('hidden');
+                rsvpSection.classList.add('hidden');
                 rsvpInBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                rsvpInBtn.classList.add("hidden");
                 rsvpOutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                rsvpOutBtn.classList.remove("hidden");
             } else {
+                rsvpdSection.classList.add('hidden');
+                rsvpSection.classList.remove('hidden');
                 rsvpInBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                rsvpInBtn.classList.remove("hidden");
                 rsvpOutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                rsvpOutBtn.classList.add("hidden");
             }
         }
         
@@ -126,7 +212,7 @@
                 loadingElement.classList.remove('hidden');
                 
                 if (isAdding && !rsvpId) {
-                    // Create a new RSVP
+                    // Create a new RSVP - nothing to do here
                     const newRSVP = {
                     };
                     
@@ -217,13 +303,20 @@
         function updateUI() {
             const count = rsvps.length;
             countElement.textContent = count;
+            countElement2.textContent = count > 0 ? count - 1 : 0;
             
-            // Add animation class temporarily when count changes
-            const counter = document.getElementById('rsvpCounter');
-            counter.classList.add('scale-110');
-            setTimeout(() => {
-                counter.classList.remove('scale-110');
-            }, 300);
+            // Use a more controlled animation sequence with CSS transitions
+            // First remove any existing animation classes
+            rsvpSection.classList.remove('animate-pulse-in', 'animate-pulse-out');
+            rsvpdSection.classList.remove('animate-pulse-in', 'animate-pulse-out');
+            
+            // Force a reflow to ensure the removal takes effect before adding new classes
+            void rsvpSection.offsetWidth;
+            void rsvpdSection.offsetWidth;
+            
+            // Add the pulse-in animation
+            rsvpSection.classList.add('animate-pulse-in');
+            rsvpdSection.classList.add('animate-pulse-in');
         }
         
         // Initialize the app
