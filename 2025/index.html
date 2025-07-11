@@ -15,6 +15,17 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
+        
+        /* Smooth animation for pulsing in and out */
+        @keyframes pulseIn {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .animate-pulse-in {
+            animation: pulseIn 0.8s ease-in-out forwards;
+        }
         @keyframes flicker {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
@@ -46,8 +57,18 @@
             </p>
             
             <div class="mt-6 mb-8">
-                <div id="rsvpCounter" class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500">
-                    🌟 <span id="count">0</span> Improvers are in!
+                <div id="rsvpSection" class="hidden transition-all duration-500">
+                    <div class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500">
+                        🌟 <span id="count">0</span> Improvers are in! 🌟 
+                    </div>
+                </div>
+                <div id="rsvpdSection" class="hidden transition-all duration-500">
+                    <div class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500">
+                        🎉 You are in! 🎉
+                    </div>
+                    <div class="text-lg mb-6">
+                        Along with <span id="count2">0</span> Improvers! 
+                    </div>
                 </div>
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -94,10 +115,13 @@
         
         // DOM Elements
         const countElement = document.getElementById('count');
+        const countElement2 = document.getElementById('count2');
         const rsvpInBtn = document.getElementById('rsvpIn');
         const rsvpOutBtn = document.getElementById('rsvpOut');
         const loadingElement = document.getElementById('loading');
         const roomNumberElement = document.getElementById('roomNumber');
+        const rsvpSection = document.getElementById('rsvpSection');
+        const rsvpdSection = document.getElementById('rsvpdSection');
         
         let rsvpId = localStorage.getItem(STORAGE_KEY);
         let rsvps = [];
@@ -167,11 +191,17 @@
             rsvpOutBtn.disabled = !hasActiveRSVP;
             
             if (hasActiveRSVP) {
+                rsvpdSection.classList.remove('hidden');
+                rsvpSection.classList.add('hidden');
                 rsvpInBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                rsvpInBtn.classList.add("hidden");
                 rsvpOutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
                 rsvpOutBtn.classList.remove("hidden");
             } else {
+                rsvpdSection.classList.add('hidden');
+                rsvpSection.classList.remove('hidden');
                 rsvpInBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                rsvpInBtn.classList.remove("hidden");
                 rsvpOutBtn.classList.add('opacity-50', 'cursor-not-allowed');
                 rsvpOutBtn.classList.add("hidden");
             }
@@ -273,13 +303,20 @@
         function updateUI() {
             const count = rsvps.length;
             countElement.textContent = count;
+            countElement2.textContent = count > 0 ? count - 1 : 0;
             
-            // Add animation class temporarily when count changes
-            const counter = document.getElementById('rsvpCounter');
-            counter.classList.add('scale-110');
-            setTimeout(() => {
-                counter.classList.remove('scale-110');
-            }, 300);
+            // Use a more controlled animation sequence with CSS transitions
+            // First remove any existing animation classes
+            rsvpSection.classList.remove('animate-pulse-in', 'animate-pulse-out');
+            rsvpdSection.classList.remove('animate-pulse-in', 'animate-pulse-out');
+            
+            // Force a reflow to ensure the removal takes effect before adding new classes
+            void rsvpSection.offsetWidth;
+            void rsvpdSection.offsetWidth;
+            
+            // Add the pulse-in animation
+            rsvpSection.classList.add('animate-pulse-in');
+            rsvpdSection.classList.add('animate-pulse-in');
         }
         
         // Initialize the app
