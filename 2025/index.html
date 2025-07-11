@@ -169,9 +169,11 @@
             if (hasActiveRSVP) {
                 rsvpInBtn.classList.add('opacity-50', 'cursor-not-allowed');
                 rsvpOutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                rsvpOutBtn.classList.remove("hidden");
             } else {
                 rsvpInBtn.classList.remove('opacity-50', 'cursor-not-allowed');
                 rsvpOutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                rsvpOutBtn.classList.add("hidden");
             }
         }
         
