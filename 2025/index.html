@@ -217,7 +217,8 @@
                 // Check if we have room data and it has a number property
                 if (roomData && roomData.length > 0 && roomData[0].number) {
                     const roomNumber = roomData[0].number;
-                    roomNumberElement.textContent = `Room ${roomNumber}`;
+                    const tower = roomData[0].tower;
+                    roomNumberElement.textContent = `Room: ${roomNumber} ${tower}`;
                     roomNumberElement.classList.add('text-xl');
                 } else {
                     roomNumberElement.textContent = 'Stay-tuned';
