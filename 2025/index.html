@@ -1,408 +1,472 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🎧 Vegas Room Party – 2025 🎉</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Poppins:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        @keyframes glow {
-            0%, 100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073; }
-            50% { text-shadow: 0 0 15px #fff, 0 0 25px #ff4da6, 0 0 35px #ff4da6, 0 0 45px #ff4da6; }
+      @keyframes glow {
+        0%,
+        100% {
+          text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073,
+            0 0 40px #e60073;
         }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+        50% {
+          text-shadow: 0 0 15px #fff, 0 0 25px #ff4da6, 0 0 35px #ff4da6,
+            0 0 45px #ff4da6;
         }
-        
-        /* Smooth animation for pulsing in and out */
-        @keyframes pulseIn {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
         }
-        
-        .animate-pulse-in {
-            animation: pulseIn 0.8s ease-in-out forwards;
+        50% {
+          transform: scale(1.05);
         }
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+      }
+
+      /* Smooth animation for pulsing in and out */
+      @keyframes pulseIn {
+        0% {
+          transform: scale(1);
         }
-        .glow-text {
-            animation: glow 2s ease-in-out infinite;
+        50% {
+          transform: scale(1.1);
         }
-        .flicker {
-            animation: flicker 3s ease-in-out infinite;
+        100% {
+          transform: scale(1);
         }
-        .pulse-hover:hover {
-            animation: pulse 1s infinite;
+      }
+
+      .animate-pulse-in {
+        animation: pulseIn 0.8s ease-in-out forwards;
+      }
+      @keyframes flicker {
+        0%,
+        100% {
+          opacity: 1;
         }
-        
-        /* Accordion animations */
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
+        50% {
+          opacity: 0.7;
         }
-        .accordion-content.open {
-            max-height: 2000px;
-            transition: max-height 0.5s ease-in;
-        }
-        .accordion-arrow {
-            transition: transform 0.3s ease;
-        }
-        .accordion-arrow.rotate {
-            transform: rotate(180deg);
-        }
-        
-        body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            min-height: 100vh;
-        }
+      }
+      .glow-text {
+        animation: glow 2s ease-in-out infinite;
+      }
+      .flicker {
+        animation: flicker 3s ease-in-out infinite;
+      }
+      .pulse-hover:hover {
+        animation: pulse 1s infinite;
+      }
+
+      /* Accordion animations */
+      .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+      }
+      .accordion-content.open {
+        max-height: 2000px;
+        transition: max-height 0.5s ease-in;
+      }
+      .accordion-arrow {
+        transition: transform 0.3s ease;
+      }
+      .accordion-arrow.rotate {
+        transform: rotate(180deg);
+      }
+
+      body {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        min-height: 100vh;
+      }
     </style>
-</head>
-<body class="text-white font-['Poppins'] flex flex-col min-h-screen">
-    <main class="flex-1 container mx-auto px-4 py-12 flex flex-col items-center justify-center text-center">
-        <h1 class="text-4xl md:text-6xl font-bold mb-6 font-['Permanent_Marker'] text-pink-500 glow-text">
-            🎧 Vegas Room Party - 2025 🎉
-        </h1>
-        
-        <div class="max-w-2xl mx-auto bg-black/30 backdrop-blur-sm rounded-2xl p-8 mb-6 border border-pink-500/30 shadow-lg shadow-pink-500/20 flicker">
-            <p class="text-lg md:text-xl mb-8 leading-relaxed">
-                After the Thursday night activities wrap up... the fun gets even better! Join us in our decked-out suite for music, lights, drinks, and good vibes. You don't want to miss this!
-            </p>
-            
-            <div class="mt-6">
-                <div id="rsvpSection" class="hidden transition-all duration-500">
-                    <div class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500">
-                        🌟 <span id="count">0</span> Improvers are in! 🌟 
-                    </div>
-                </div>
-                <div id="rsvpdSection" class="hidden transition-all duration-500">
-                    <div class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500">
-                        🎉 You are in! 🎉
-                    </div>
-                    <div class="text-lg mb-6">
-                        Along with <span id="count2">0</span> Improvers! 
-                    </div>
-                </div>
-                
-                <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button id="rsvpIn" class="px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full font-bold text-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-pink-500/30 pulse-hover">
-                        ✅ Count Me In!
-                    </button>
-                    <button id="rsvpOut" class="px-8 py-3 bg-gradient-to-r from-gray-600 to-gray-700 rounded-full font-bold text-lg hover:from-gray-700 hover:to-gray-800 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-gray-500/20 pulse-hover">
-                        ❌ Nevermind
-                    </button>
-                </div>
-                <div id="loading" class="mt-4 text-cyan-300 hidden">
-                    Loading...
-                </div>
+  </head>
+  <body class="text-white font-['Poppins'] flex flex-col min-h-screen">
+    <main
+      class="flex-1 container mx-auto px-4 py-12 flex flex-col items-center justify-center text-center"
+    >
+      <h1
+        class="text-4xl md:text-6xl font-bold mb-6 font-['Permanent_Marker'] text-pink-500 glow-text"
+      >
+        🎧 Vegas Room Party - 2025 🎉
+      </h1>
+
+      <div
+        class="max-w-2xl mx-auto bg-black/30 backdrop-blur-sm rounded-2xl p-8 mb-6 border border-pink-500/30 shadow-lg shadow-pink-500/20 flicker"
+      >
+        <p class="text-lg md:text-xl mb-8 leading-relaxed">
+          After the Thursday night activities wrap up... the fun gets even
+          better! Join us in our decked-out suite for music, lights, drinks, and
+          good vibes. You don't want to miss this!
+        </p>
+
+        <div class="mt-6">
+          <div id="rsvpSection" class="hidden transition-all duration-500">
+            <div
+              class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500"
+            >
+              🌟 <span id="count">0</span> Improvers are in! 🌟
             </div>
-        </div>
-        
-        <div class="bg-gradient-to-r from-purple-900/60 to-pink-900/60 backdrop-blur-sm p-4 mb-8 rounded-xl border border-pink-500/40 shadow-lg shadow-pink-500/20">
-            <h3 class="text-xl font-bold text-cyan-300 mb-2">Event Details</h3>
-            <div class="flex flex-col md:flex-row gap-4 text-white">
-                <div class="flex items-center">
-                    <span class="text-pink-400 mr-2">👥</span>
-                    <span class="font-semibold">Hosted by:</span>
-                    <span class="ml-2 text-cyan-200">Jem & Steele</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="text-pink-400 mr-2">🕒</span>
-                    <span class="font-semibold">When:</span>
-                    <span class="ml-2 text-cyan-200">Thursday night after your event</span>
-                </div>
-                <div class="flex items-center">
-                    <span class="text-pink-400 mr-2">🏨</span>
-                    <span class="font-semibold">Room:</span>
-                    <span id="roomNumber" class="ml-2 text-cyan-200 glow-text">Stay-tuned</span>
-                </div>
+          </div>
+          <div id="rsvpdSection" class="hidden transition-all duration-500">
+            <div
+              class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500"
+            >
+              🎉 You are in! 🎉
             </div>
-        </div>
-        
-        <!-- Venmo Donation Section -->
-        <div class="w-full max-w-2xl mx-auto mb-8">
-            <div class="bg-gradient-to-r from-green-900/60 to-emerald-900/60 backdrop-blur-sm p-6 rounded-xl border border-green-500/30 shadow-lg shadow-green-500/20">
-                <h3 class="text-xl font-bold text-green-300 mb-3 text-center">🍹 Help Stock the Bar! 💚</h3>
-                <p class="text-gray-300 text-center mb-4">
-                    Want to help us keep the drinks flowing? Any contribution helps cover the party supplies!
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-3">
-                    <a href="venmo://paycharge?txn=pay&recipients=jemkegawa&amount=&note=Vegas%20Room%20Party%202025" 
-                       class="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-green-500/30 pulse-hover">
-                        💚 Venmo
-                    </a>
-                    <a href="https://paypal.me/manofsteele86" target="_blank" rel="noopener noreferrer"
-                       class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full font-bold text-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30 pulse-hover">
-                        💙 PayPal
-                    </a>
-                </div>
-                <p class="text-xs text-gray-400 text-center mt-2">
-                    @jemkegawa • paypal.me/manofsteele86 • Completely optional!
-                </p>
+            <div class="text-lg mb-6">
+              Along with <span id="count2">0</span> Improvers!
             </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              id="rsvpIn"
+              class="px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full font-bold text-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-pink-500/30 pulse-hover"
+            >
+              ✅ Count Me In!
+            </button>
+            <button
+              id="rsvpOut"
+              class="px-8 py-3 bg-gradient-to-r from-gray-600 to-gray-700 rounded-full font-bold text-lg hover:from-gray-700 hover:to-gray-800 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-gray-500/20 pulse-hover"
+            >
+              ❌ Nevermind
+            </button>
+          </div>
+          <div id="loading" class="mt-4 text-cyan-300 hidden">Loading...</div>
         </div>
-        
-        <!-- Drinks Menu Section -->
-        <div class="w-full max-w-4xl mx-auto mb-8">
-            <h2 class="text-3xl md:text-4xl font-bold mb-8 font-['Permanent_Marker'] text-center text-cyan-300">
-                🍹 Drink Menu 🍸
-            </h2>
-            
-            <div id="drinksMenu" class="space-y-4">
-                <!-- Menu will be dynamically generated here -->
-            </div>
+      </div>
+
+      <div
+        class="bg-gradient-to-r from-purple-900/60 to-pink-900/60 backdrop-blur-sm p-4 mb-8 rounded-xl border border-pink-500/40 shadow-lg shadow-pink-500/20"
+      >
+        <h3 class="text-xl font-bold text-cyan-300 mb-2">Event Details</h3>
+        <div class="flex flex-col md:flex-row gap-4 text-white">
+          <div class="flex items-center">
+            <span class="text-pink-400 mr-2">👥</span>
+            <span class="font-semibold">Hosted by:</span>
+            <span class="ml-2 text-cyan-200">Jem & Steele</span>
+          </div>
+          <div class="flex items-center">
+            <span class="text-pink-400 mr-2">🕒</span>
+            <span class="font-semibold">When:</span>
+            <span class="ml-2 text-cyan-200"
+              >Thursday night after your event</span
+            >
+          </div>
+          <div class="flex items-center">
+            <span class="text-pink-400 mr-2">🏨</span>
+            <span class="font-semibold">Room:</span>
+            <span id="roomNumber" class="ml-2 text-cyan-200 glow-text"
+              >Stay-tuned</span
+            >
+          </div>
         </div>
+      </div>
+
+      <!-- Venmo Donation Section -->
+      <div class="w-full max-w-2xl mx-auto mb-8">
+        <div
+          class="bg-gradient-to-r from-green-900/60 to-emerald-900/60 backdrop-blur-sm p-6 rounded-xl border border-green-500/30 shadow-lg shadow-green-500/20"
+        >
+          <h3 class="text-xl font-bold text-green-300 mb-3 text-center">
+            🍹 Help Stock the Bar! 💚
+          </h3>
+          <p class="text-gray-300 text-center mb-4">
+            Want to help us keep the drinks flowing? Any contribution helps
+            cover the party supplies!
+          </p>
+
+          <div class="flex flex-col sm:flex-row justify-center gap-3">
+            <!-- Venmo Button -->
+            <a
+              href="https://venmo.com/jemkegawa?txn=pay&note=Vegas%20Room%20Party%202025"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-green-500/30 pulse-hover"
+            >
+              💚 Venmo
+            </a>
+
+            <!-- PayPal (unchanged) -->
+            <a
+              href="https://paypal.me/manofsteele86"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full font-bold text-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30 pulse-hover"
+            >
+              💙 PayPal
+            </a>
+          </div>
+
+          <p class="text-xs text-gray-400 text-center mt-2">
+            @jemkegawa • paypal.me/manofsteele86 • Completely optional!
+          </p>
+        </div>
+      </div>
+
+      <!-- Drinks Menu Section -->
+      <div class="w-full max-w-4xl mx-auto mb-8">
+        <h2
+          class="text-3xl md:text-4xl font-bold mb-8 font-['Permanent_Marker'] text-center text-cyan-300"
+        >
+          🍹 Drink Menu 🍸
+        </h2>
+
+        <div id="drinksMenu" class="space-y-4">
+          <!-- Menu will be dynamically generated here -->
+        </div>
+      </div>
     </main>
 
     <script>
-        // API endpoints
-        const API_URL = 'https://68700fea7ca4d06b34b5dfa1.mockapi.io/api/improving-vegas/2025/rsvps';
-        const ROOM_API_URL = 'https://68700fea7ca4d06b34b5dfa1.mockapi.io/api/improving-vegas/2025/room';
-        const STORAGE_KEY = 'vegasPartyRSVP';
-        
-        // DOM Elements
-        const countElement = document.getElementById('count');
-        const countElement2 = document.getElementById('count2');
-        const rsvpInBtn = document.getElementById('rsvpIn');
-        const rsvpOutBtn = document.getElementById('rsvpOut');
-        const loadingElement = document.getElementById('loading');
-        const roomNumberElement = document.getElementById('roomNumber');
-        const rsvpSection = document.getElementById('rsvpSection');
-        const rsvpdSection = document.getElementById('rsvpdSection');
-        
-        let rsvpId = localStorage.getItem(STORAGE_KEY);
-        let rsvps = [];
-        
-        // Initialize the page
-        async function init() {
-            try {
-                loadingElement.classList.remove('hidden');
-                
-                // Fetch RSVPs
-                const rsvpResponse = await fetch(API_URL);
-                const rsvpData = await rsvpResponse.json();
-                // Only store an array of the "id" fields
-                rsvps = rsvpData.map(rsvp => rsvp.id);
-                updateUI();
-                
-                // Fetch room number
-                await fetchRoomNumber();
-                
-            } catch (error) {
-                console.error('Error in initialization:', error);
-                rsvps = [];
-            } finally {
-                loadingElement.classList.add('hidden');
-            }
-            
-            setupEventListeners();
+      // API endpoints
+      const API_URL =
+        "https://68700fea7ca4d06b34b5dfa1.mockapi.io/api/improving-vegas/2025/rsvps";
+      const ROOM_API_URL =
+        "https://68700fea7ca4d06b34b5dfa1.mockapi.io/api/improving-vegas/2025/room";
+      const STORAGE_KEY = "vegasPartyRSVP";
+
+      // DOM Elements
+      const countElement = document.getElementById("count");
+      const countElement2 = document.getElementById("count2");
+      const rsvpInBtn = document.getElementById("rsvpIn");
+      const rsvpOutBtn = document.getElementById("rsvpOut");
+      const loadingElement = document.getElementById("loading");
+      const roomNumberElement = document.getElementById("roomNumber");
+      const rsvpSection = document.getElementById("rsvpSection");
+      const rsvpdSection = document.getElementById("rsvpdSection");
+
+      let rsvpId = localStorage.getItem(STORAGE_KEY);
+      let rsvps = [];
+
+      // Initialize the page
+      async function init() {
+        try {
+          loadingElement.classList.remove("hidden");
+
+          // Fetch RSVPs
+          const rsvpResponse = await fetch(API_URL);
+          const rsvpData = await rsvpResponse.json();
+          // Only store an array of the "id" fields
+          rsvps = rsvpData.map((rsvp) => rsvp.id);
+          updateUI();
+
+          // Fetch room number
+          await fetchRoomNumber();
+        } catch (error) {
+          console.error("Error in initialization:", error);
+          rsvps = [];
+        } finally {
+          loadingElement.classList.add("hidden");
         }
-        
-        // Fetch room number from the API
-        async function fetchRoomNumber() {
-            try {
-                const response = await fetch(ROOM_API_URL);
-                
-                if (!response.ok) {
-                    throw new Error('Failed to fetch room data');
-                }
-                
-                const roomData = await response.json();
-                
-                // Check if we have room data and it has a number property
-                if (roomData && roomData.length > 0 && roomData[0].number) {
-                    const roomNumber = roomData[0].number;
-                    const tower = roomData[0].tower;
-                    roomNumberElement.textContent = `Room: ${roomNumber} ${tower}`;
-                    roomNumberElement.classList.add('text-xl');
-                } else {
-                    roomNumberElement.textContent = 'Stay-tuned';
-                    roomNumberElement.classList.remove('text-xl');
-                }
-            } catch (error) {
-                console.error('Error fetching room number:', error);
-                roomNumberElement.textContent = 'Stay-tuned';
-                roomNumberElement.classList.remove('text-xl');
-            }
+
+        setupEventListeners();
+      }
+
+      // Fetch room number from the API
+      async function fetchRoomNumber() {
+        try {
+          const response = await fetch(ROOM_API_URL);
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch room data");
+          }
+
+          const roomData = await response.json();
+
+          // Check if we have room data and it has a number property
+          if (roomData && roomData.length > 0 && roomData[0].number) {
+            const roomNumber = roomData[0].number;
+            const tower = roomData[0].tower;
+            roomNumberElement.textContent = `Room: ${roomNumber} ${tower}`;
+            roomNumberElement.classList.add("text-xl");
+          } else {
+            roomNumberElement.textContent = "Stay-tuned";
+            roomNumberElement.classList.remove("text-xl");
+          }
+        } catch (error) {
+          console.error("Error fetching room number:", error);
+          roomNumberElement.textContent = "Stay-tuned";
+          roomNumberElement.classList.remove("text-xl");
         }
-        
-        function setupEventListeners() {
-            rsvpInBtn.addEventListener('click', () => updateRSVP(true));
-            rsvpOutBtn.addEventListener('click', () => updateRSVP(false));
+      }
+
+      function setupEventListeners() {
+        rsvpInBtn.addEventListener("click", () => updateRSVP(true));
+        rsvpOutBtn.addEventListener("click", () => updateRSVP(false));
+        updateButtonStates();
+      }
+
+      function updateButtonStates() {
+        const hasActiveRSVP = !!rsvpId && rsvps.some((r) => r === rsvpId);
+
+        rsvpInBtn.disabled = hasActiveRSVP;
+        rsvpOutBtn.disabled = !hasActiveRSVP;
+
+        if (hasActiveRSVP) {
+          rsvpdSection.classList.remove("hidden");
+          rsvpSection.classList.add("hidden");
+          rsvpInBtn.classList.add("opacity-50", "cursor-not-allowed");
+          rsvpInBtn.classList.add("hidden");
+          rsvpOutBtn.classList.remove("opacity-50", "cursor-not-allowed");
+          rsvpOutBtn.classList.remove("hidden");
+        } else {
+          rsvpdSection.classList.add("hidden");
+          rsvpSection.classList.remove("hidden");
+          rsvpInBtn.classList.remove("opacity-50", "cursor-not-allowed");
+          rsvpInBtn.classList.remove("hidden");
+          rsvpOutBtn.classList.add("opacity-50", "cursor-not-allowed");
+          rsvpOutBtn.classList.add("hidden");
+        }
+      }
+
+      async function updateRSVP(isAdding) {
+        try {
+          loadingElement.classList.remove("hidden");
+
+          if (isAdding && !rsvpId) {
+            // Create a new RSVP - nothing to do here
+            const newRSVP = {};
+
+            // Send to server
+            try {
+              const response = await fetch(API_URL, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newRSVP),
+              });
+
+              if (!response.ok) throw new Error("Failed to create RSVP");
+
+              // Update with server's version of the RSVP
+              const serverRSVP = await response.json();
+              rsvpId = serverRSVP.id; // In case server generated a different ID
+              localStorage.setItem(STORAGE_KEY, rsvpId);
+              rsvps.push(rsvpId);
+              updateUI();
+              updateButtonStates();
+            } catch (error) {
+              console.error("Error creating RSVP:", error);
+              // Revert optimistic update on error
+              rsvps = rsvps.filter((r) => r !== rsvpId);
+              rsvpId = null;
+              localStorage.removeItem(STORAGE_KEY);
+            }
+          } else if (!isAdding) {
+            // Try to find the RSVP to delete
+            let rsvpToDelete = rsvpId;
+
+            // If we don't have an RSVP ID, try to find it in the server data
+            if (!rsvpToDelete && rsvps.length > 0) {
+              // Try to find the user's RSVP by some identifier (like IP or user agent)
+              // For now, we'll just take the first one that matches the stored ID
+              const storedId = localStorage.getItem(STORAGE_KEY);
+              if (storedId) {
+                const userRSVP = rsvps.find((r) => r === storedId);
+                if (userRSVP) {
+                  rsvpToDelete = userRSVP;
+                }
+              }
+            }
+
+            if (!rsvpToDelete) {
+              console.log("No RSVP found to delete");
+              return;
+            }
+
+            // Optimistically update UI
+            rsvps = rsvps.filter((r) => r !== rsvpToDelete);
+            rsvpId = null;
+            localStorage.removeItem(STORAGE_KEY);
+            updateUI();
             updateButtonStates();
-        }
-        
-        function updateButtonStates() {
-            const hasActiveRSVP = !!rsvpId && rsvps.some(r => r === rsvpId);
-            
-            rsvpInBtn.disabled = hasActiveRSVP;
-            rsvpOutBtn.disabled = !hasActiveRSVP;
-            
-            if (hasActiveRSVP) {
-                rsvpdSection.classList.remove('hidden');
-                rsvpSection.classList.add('hidden');
-                rsvpInBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                rsvpInBtn.classList.add("hidden");
-                rsvpOutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                rsvpOutBtn.classList.remove("hidden");
-            } else {
-                rsvpdSection.classList.add('hidden');
-                rsvpSection.classList.remove('hidden');
-                rsvpInBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                rsvpInBtn.classList.remove("hidden");
-                rsvpOutBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                rsvpOutBtn.classList.add("hidden");
-            }
-        }
-        
-        async function updateRSVP(isAdding) {
+
+            // Delete from server
             try {
-                loadingElement.classList.remove('hidden');
-                
-                if (isAdding && !rsvpId) {
-                    // Create a new RSVP - nothing to do here
-                    const newRSVP = {
-                    };
-                    
-                    // Send to server
-                    try {
-                        const response = await fetch(API_URL, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(newRSVP)
-                        });
-                        
-                        if (!response.ok) throw new Error('Failed to create RSVP');
-                        
-                        // Update with server's version of the RSVP
-                        const serverRSVP = await response.json();
-                        rsvpId = serverRSVP.id; // In case server generated a different ID
-                        localStorage.setItem(STORAGE_KEY, rsvpId);
-                        rsvps.push(rsvpId);
-                        updateUI();
-                        updateButtonStates();
-                        
-                    } catch (error) {
-                        console.error('Error creating RSVP:', error);
-                        // Revert optimistic update on error
-                        rsvps = rsvps.filter(r => r !== rsvpId);
-                        rsvpId = null;
-                        localStorage.removeItem(STORAGE_KEY);
-                    }
-                    
-                } else if (!isAdding) {
-                    // Try to find the RSVP to delete
-                    let rsvpToDelete = rsvpId;
-                    
-                    // If we don't have an RSVP ID, try to find it in the server data
-                    if (!rsvpToDelete && rsvps.length > 0) {
-                        // Try to find the user's RSVP by some identifier (like IP or user agent)
-                        // For now, we'll just take the first one that matches the stored ID
-                        const storedId = localStorage.getItem(STORAGE_KEY);
-                        if (storedId) {
-                            const userRSVP = rsvps.find(r => r === storedId);
-                            if (userRSVP) {
-                                rsvpToDelete = userRSVP;
-                            }
-                        }
-                    }
-                    
-                    if (!rsvpToDelete) {
-                        console.log('No RSVP found to delete');
-                        return;
-                    }
-                    
-                    // Optimistically update UI
-                    rsvps = rsvps.filter(r => r !== rsvpToDelete);
-                    rsvpId = null;
-                    localStorage.removeItem(STORAGE_KEY);
-                    updateUI();
-                    updateButtonStates();
-                    
-                    // Delete from server
-                    try {
-                        const response = await fetch(`${API_URL}/${rsvpToDelete}`, {
-                            method: 'DELETE'
-                        });
-                        
-                        if (!response.ok) {
-                            // If delete fails with 404, the RSVP might have been deleted already
-                            if (response.status !== 404) {
-                                throw new Error('Failed to delete RSVP');
-                            }
-                        }
-                        
-                    } catch (error) {
-                        console.error('Error deleting RSVP:', error);
-                        // We'll keep the optimistic update since we can't be sure of the server state
-                        // The next refresh will sync with the server
-                    }
+              const response = await fetch(`${API_URL}/${rsvpToDelete}`, {
+                method: "DELETE",
+              });
+
+              if (!response.ok) {
+                // If delete fails with 404, the RSVP might have been deleted already
+                if (response.status !== 404) {
+                  throw new Error("Failed to delete RSVP");
                 }
-                
+              }
             } catch (error) {
-                console.error('Error in updateRSVP:', error);
-            } finally {
-                loadingElement.classList.add('hidden');
+              console.error("Error deleting RSVP:", error);
+              // We'll keep the optimistic update since we can't be sure of the server state
+              // The next refresh will sync with the server
             }
+          }
+        } catch (error) {
+          console.error("Error in updateRSVP:", error);
+        } finally {
+          loadingElement.classList.add("hidden");
         }
-        
-        function updateUI() {
-            const count = rsvps.length;
-            countElement.textContent = count;
-            countElement2.textContent = count > 0 ? count - 1 : 0;
-            
-            // Use a more controlled animation sequence with CSS transitions
-            // First remove any existing animation classes
-            rsvpSection.classList.remove('animate-pulse-in', 'animate-pulse-out');
-            rsvpdSection.classList.remove('animate-pulse-in', 'animate-pulse-out');
-            
-            // Force a reflow to ensure the removal takes effect before adding new classes
-            void rsvpSection.offsetWidth;
-            void rsvpdSection.offsetWidth;
-            
-            // Add the pulse-in animation
-            rsvpSection.classList.add('animate-pulse-in');
-            rsvpdSection.classList.add('animate-pulse-in');
-        }
-        
-        // Load drinks data (now synchronous since it's embedded)
-        function loadDrinksData() {
-            generateDrinksMenu();
-        }
-        
-        // Generate the drinks menu HTML
-        function generateDrinksMenu() {
-            const menuContainer = document.getElementById('drinksMenu');
-            
-            // Group drinks by category and alcohol_base
-            const groupedDrinks = groupDrinksByCategory();
-            
-            let menuHTML = '';
-            
-            Object.keys(groupedDrinks).forEach((category, categoryIndex) => {
-                const categoryIcons = {
-                    'cocktail': '🍸',
-                    'shot': '🥃',
-                    'mocktails': '🧃',
-                    'keep it simple': '🍺'
-                };
-                const categoryNames = {
-                    'cocktail': 'Cocktails',
-                    'shot': 'Shots',
-                    'mocktails': 'Mocktails',
-                    'keep it simple': 'Keep It Simple'
-                };
-                const categoryIcon = categoryIcons[category] || '🍹';
-                const categoryName = categoryNames[category] || category;
-                
-                menuHTML += `
+      }
+
+      function updateUI() {
+        const count = rsvps.length;
+        countElement.textContent = count;
+        countElement2.textContent = count > 0 ? count - 1 : 0;
+
+        // Use a more controlled animation sequence with CSS transitions
+        // First remove any existing animation classes
+        rsvpSection.classList.remove("animate-pulse-in", "animate-pulse-out");
+        rsvpdSection.classList.remove("animate-pulse-in", "animate-pulse-out");
+
+        // Force a reflow to ensure the removal takes effect before adding new classes
+        void rsvpSection.offsetWidth;
+        void rsvpdSection.offsetWidth;
+
+        // Add the pulse-in animation
+        rsvpSection.classList.add("animate-pulse-in");
+        rsvpdSection.classList.add("animate-pulse-in");
+      }
+
+      // Load drinks data (now synchronous since it's embedded)
+      function loadDrinksData() {
+        generateDrinksMenu();
+      }
+
+      // Generate the drinks menu HTML
+      function generateDrinksMenu() {
+        const menuContainer = document.getElementById("drinksMenu");
+
+        // Group drinks by category and alcohol_base
+        const groupedDrinks = groupDrinksByCategory();
+
+        let menuHTML = "";
+
+        Object.keys(groupedDrinks).forEach((category, categoryIndex) => {
+          const categoryIcons = {
+            cocktail: "🍸",
+            shot: "🥃",
+            mocktails: "🧃",
+            "keep it simple": "🍺",
+          };
+          const categoryNames = {
+            cocktail: "Cocktails",
+            shot: "Shots",
+            mocktails: "Mocktails",
+            "keep it simple": "Keep It Simple",
+          };
+          const categoryIcon = categoryIcons[category] || "🍹";
+          const categoryName = categoryNames[category] || category;
+
+          menuHTML += `
                     <div class="bg-black/40 backdrop-blur-sm rounded-2xl border border-pink-500/30 shadow-lg shadow-pink-500/20 overflow-hidden">
                         <button class="w-full px-6 py-4 text-left bg-gradient-to-r from-purple-900/60 to-pink-900/60 hover:from-purple-800/70 hover:to-pink-800/70 transition-all duration-300 flex justify-between items-center" 
                                 onclick="toggleAccordion('category-${categoryIndex}')">
@@ -413,63 +477,66 @@
                         </button>
                         <div class="accordion-content" id="category-${categoryIndex}">
                             <div class="p-4 space-y-3">
-                                ${generateCategoryContent(groupedDrinks[category], categoryIndex)}
+                                ${generateCategoryContent(
+                                  groupedDrinks[category],
+                                  categoryIndex
+                                )}
                             </div>
                         </div>
                     </div>
                 `;
-            });
-            
-            menuContainer.innerHTML = menuHTML;
-        }
-        
-        // Group drinks by category and alcohol_base
-        function groupDrinksByCategory() {
-            const grouped = {};
-            
-            drinksData.forEach(drink => {
-                if (!grouped[drink.category]) {
-                    grouped[drink.category] = {};
-                }
-                if (!grouped[drink.category][drink.alcohol_base]) {
-                    grouped[drink.category][drink.alcohol_base] = [];
-                }
-                grouped[drink.category][drink.alcohol_base].push(drink);
-            });
-            
-            return grouped;
-        }
-        
-        // Generate category content (with or without alcohol base sub-accordions)
-        function generateCategoryContent(alcoholBases, categoryIndex) {
-            // Check if this category has alcohol_base "none" - if so, skip sub-accordions
-            const hasNoneAlcoholBase = Object.keys(alcoholBases).includes('none');
-            
-            if (hasNoneAlcoholBase) {
-                // For categories with alcohol_base "none", display drinks directly in a grid
-                const allDrinks = Object.values(alcoholBases).flat();
-                return `
+        });
+
+        menuContainer.innerHTML = menuHTML;
+      }
+
+      // Group drinks by category and alcohol_base
+      function groupDrinksByCategory() {
+        const grouped = {};
+
+        drinksData.forEach((drink) => {
+          if (!grouped[drink.category]) {
+            grouped[drink.category] = {};
+          }
+          if (!grouped[drink.category][drink.alcohol_base]) {
+            grouped[drink.category][drink.alcohol_base] = [];
+          }
+          grouped[drink.category][drink.alcohol_base].push(drink);
+        });
+
+        return grouped;
+      }
+
+      // Generate category content (with or without alcohol base sub-accordions)
+      function generateCategoryContent(alcoholBases, categoryIndex) {
+        // Check if this category has alcohol_base "none" - if so, skip sub-accordions
+        const hasNoneAlcoholBase = Object.keys(alcoholBases).includes("none");
+
+        if (hasNoneAlcoholBase) {
+          // For categories with alcohol_base "none", display drinks directly in a grid
+          const allDrinks = Object.values(alcoholBases).flat();
+          return `
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                         ${generateDrinkCards(allDrinks)}
                     </div>
                 `;
-            } else {
-                // For other categories, use the alcohol base sub-accordions
-                return generateAlcoholBaseAccordions(alcoholBases, categoryIndex);
-            }
+        } else {
+          // For other categories, use the alcohol base sub-accordions
+          return generateAlcoholBaseAccordions(alcoholBases, categoryIndex);
         }
-        
-        // Generate alcohol base sub-accordions
-        function generateAlcoholBaseAccordions(alcoholBases, categoryIndex) {
-            let html = '';
-            
-            Object.keys(alcoholBases).forEach((alcoholBase, baseIndex) => {
-                const drinks = alcoholBases[alcoholBase];
-                const baseIcon = getAlcoholBaseIcon(alcoholBase);
-                const baseName = capitalizeFirst(alcoholBase);
-                const accordionId = `base-${categoryIndex}-${baseIndex}`;
-                
-                html += `
+      }
+
+      // Generate alcohol base sub-accordions
+      function generateAlcoholBaseAccordions(alcoholBases, categoryIndex) {
+        let html = "";
+
+        Object.keys(alcoholBases).forEach((alcoholBase, baseIndex) => {
+          const drinks = alcoholBases[alcoholBase];
+          const baseIcon = getAlcoholBaseIcon(alcoholBase);
+          const baseName = capitalizeFirst(alcoholBase);
+          const accordionId = `base-${categoryIndex}-${baseIndex}`;
+
+          html += `
                     <div class="bg-gray-900/50 rounded-xl border border-cyan-500/20 overflow-hidden">
                         <button class="w-full px-4 py-3 text-left bg-gradient-to-r from-gray-800/60 to-gray-700/60 hover:from-gray-700/70 hover:to-gray-600/70 transition-all duration-300 flex justify-between items-center" 
                                 onclick="toggleAccordion('${accordionId}')">
@@ -487,727 +554,727 @@
                         </div>
                     </div>
                 `;
-            });
-            
-            return html;
-        }
-        
-        // Generate individual drink cards
-        function generateDrinkCards(drinks) {
-            return drinks.map(drink => `
-                <div class="bg-gradient-to-br from-purple-900/40 to-pink-900/40 rounded-lg p-4 border border-pink-400/20 hover:border-pink-400/40 transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/20">
-                    <h4 class="text-lg font-bold text-cyan-100 mb-3">${drink.name}</h4>
-                    <ol class="text-gray-300 space-y-1 text-sm text-left">
-                        ${drink.steps.map((step, index) => `
-                            <li class="flex items-start">
-                                <span class="inline-block w-6 h-6 bg-pink-500 text-white text-xs font-bold rounded-full flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">${index + 1}</span>
-                                <span>${step}</span>
-                            </li>
-                        `).join('')}
-                    </ol>
-                </div>
-            `).join('');
-        }
-        
-        // Get icon for alcohol base
-        function getAlcoholBaseIcon(alcoholBase) {
-            const icons = {
-                'vodka': '🍸',
-                'tequila': '🌵',
-                'whiskey': '🥃',
-                'rum': '🏴‍☠️',
-                'mixed': '🎭'
-            };
-            return icons[alcoholBase] || '🍹';
-        }
-        
-        // Capitalize first letter
-        function capitalizeFirst(str) {
-            return str.charAt(0).toUpperCase() + str.slice(1);
-        }
-        
-        // Toggle accordion functionality
-        function toggleAccordion(accordionId) {
-            const content = document.getElementById(accordionId);
-            const arrow = document.getElementById(`arrow-${accordionId}`);
-            
-            if (content.classList.contains('open')) {
-                // Collapsing: close this accordion and all child accordions
-                content.classList.remove('open');
-                arrow.classList.remove('rotate');
-                
-                // If this is a category accordion, close all child alcohol base accordions
-                if (accordionId.startsWith('category-')) {
-                    const childAccordions = content.querySelectorAll('.accordion-content.open');
-                    childAccordions.forEach(childContent => {
-                        const childId = childContent.id;
-                        const childArrow = document.getElementById(`arrow-${childId}`);
-                        childContent.classList.remove('open');
-                        if (childArrow) {
-                            childArrow.classList.remove('rotate');
-                        }
-                    });
-                }
-            } else {
-                // Expanding: open this accordion
-                content.classList.add('open');
-                arrow.classList.add('rotate');
-            }
-        }
-        
-        // Initialize the app
-        document.addEventListener('DOMContentLoaded', () => {
-            init();
-            loadDrinksData();
         });
 
-        // Drinks Menu Functionality - Embedded Data
-        const drinksData = [
-    {
-        "name": "Vodka Soda",
-        "category": "cocktail",
-        "alcohol_base": "vodka",
-        "steps": [
+        return html;
+      }
+
+      // Generate individual drink cards
+      function generateDrinkCards(drinks) {
+        return drinks
+          .map(
+            (drink) => `
+                <div class="bg-gradient-to-br from-purple-900/40 to-pink-900/40 rounded-lg p-4 border border-pink-400/20 hover:border-pink-400/40 transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/20">
+                    <h4 class="text-lg font-bold text-cyan-100 mb-3">${
+                      drink.name
+                    }</h4>
+                    <ol class="text-gray-300 space-y-1 text-sm text-left">
+                        ${drink.steps
+                          .map(
+                            (step, index) => `
+                            <li class="flex items-start">
+                                <span class="inline-block w-6 h-6 bg-pink-500 text-white text-xs font-bold rounded-full flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">${
+                                  index + 1
+                                }</span>
+                                <span>${step}</span>
+                            </li>
+                        `
+                          )
+                          .join("")}
+                    </ol>
+                </div>
+            `
+          )
+          .join("");
+      }
+
+      // Get icon for alcohol base
+      function getAlcoholBaseIcon(alcoholBase) {
+        const icons = {
+          vodka: "🍸",
+          tequila: "🌵",
+          whiskey: "🥃",
+          rum: "🏴‍☠️",
+          mixed: "🎭",
+        };
+        return icons[alcoholBase] || "🍹";
+      }
+
+      // Capitalize first letter
+      function capitalizeFirst(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      }
+
+      // Toggle accordion functionality
+      function toggleAccordion(accordionId) {
+        const content = document.getElementById(accordionId);
+        const arrow = document.getElementById(`arrow-${accordionId}`);
+
+        if (content.classList.contains("open")) {
+          // Collapsing: close this accordion and all child accordions
+          content.classList.remove("open");
+          arrow.classList.remove("rotate");
+
+          // If this is a category accordion, close all child alcohol base accordions
+          if (accordionId.startsWith("category-")) {
+            const childAccordions = content.querySelectorAll(
+              ".accordion-content.open"
+            );
+            childAccordions.forEach((childContent) => {
+              const childId = childContent.id;
+              const childArrow = document.getElementById(`arrow-${childId}`);
+              childContent.classList.remove("open");
+              if (childArrow) {
+                childArrow.classList.remove("rotate");
+              }
+            });
+          }
+        } else {
+          // Expanding: open this accordion
+          content.classList.add("open");
+          arrow.classList.add("rotate");
+        }
+      }
+
+      // Initialize the app
+      document.addEventListener("DOMContentLoaded", () => {
+        init();
+        loadDrinksData();
+      });
+
+      // Drinks Menu Functionality - Embedded Data
+      const drinksData = [
+        {
+          name: "Vodka Soda",
+          category: "cocktail",
+          alcohol_base: "vodka",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz vodka",
             "Fill with club soda (~12 oz)",
-            "Garnish with lime wedge"
-        ]
-    },
-    {
-        "name": "Vodka Cranberry",
-        "category": "cocktail",
-        "alcohol_base": "vodka",
-        "steps": [
+            "Garnish with lime wedge",
+          ],
+        },
+        {
+          name: "Vodka Cranberry",
+          category: "cocktail",
+          alcohol_base: "vodka",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz vodka",
             "Add 8 oz cranberry juice",
             "Top with club soda (~2\u20133 oz)",
-            "Garnish with lime wedge"
-        ]
-    },
-    {
-        "name": "Screwdriver",
-        "category": "cocktail",
-        "alcohol_base": "vodka",
-        "steps": [
+            "Garnish with lime wedge",
+          ],
+        },
+        {
+          name: "Screwdriver",
+          category: "cocktail",
+          alcohol_base: "vodka",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz vodka",
             "Add 10 oz orange juice",
-            "Top with Sprite splash (~2 oz)"
-        ]
-    },
-    {
-        "name": "Moscow Mule (Easy)",
-        "category": "cocktail",
-        "alcohol_base": "vodka",
-        "steps": [
+            "Top with Sprite splash (~2 oz)",
+          ],
+        },
+        {
+          name: "Moscow Mule (Easy)",
+          category: "cocktail",
+          alcohol_base: "vodka",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz vodka",
             "Add 6 oz ginger beer",
             "Squeeze lime wedge",
-            "Top with club soda to fill"
-        ]
-    },
-    {
-        "name": "Vodka Sprite Lime",
-        "category": "cocktail",
-        "alcohol_base": "vodka",
-        "steps": [
+            "Top with club soda to fill",
+          ],
+        },
+        {
+          name: "Vodka Sprite Lime",
+          category: "cocktail",
+          alcohol_base: "vodka",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz vodka",
             "Fill with Sprite (~10 oz)",
-            "Squeeze lime wedge"
-        ]
-    },
-    {
-        "name": "Lemon Drop",
-        "category": "shot",
-        "alcohol_base": "vodka",
-        "steps": [
+            "Squeeze lime wedge",
+          ],
+        },
+        {
+          name: "Lemon Drop",
+          category: "shot",
+          alcohol_base: "vodka",
+          steps: [
             "Pour 1 oz vodka into a shot glass",
             "Add squeeze of lemon juice",
             "Optional: rim with sugar",
-            "Shoot and bite lemon wedge"
-        ]
-    },
-    {
-        "name": "Cranberry Kamikaze",
-        "category": "shot",
-        "alcohol_base": "vodka",
-        "steps": [
+            "Shoot and bite lemon wedge",
+          ],
+        },
+        {
+          name: "Cranberry Kamikaze",
+          category: "shot",
+          alcohol_base: "vodka",
+          steps: [
             "Add ice to a shaker",
             "Pour in 1 oz vodka",
             "Add a splash of cranberry juice and Sprite",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Vodka Sprite Shot",
-        "category": "shot",
-        "alcohol_base": "vodka",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Vodka Sprite Shot",
+          category: "shot",
+          alcohol_base: "vodka",
+          steps: [
             "Pour 1 oz vodka into a shot glass",
-            "Top with splash Sprite"
-        ]
-    },
-    {
-        "name": "Pineapple Vodka Drop",
-        "category": "shot",
-        "alcohol_base": "vodka",
-        "steps": [
+            "Top with splash Sprite",
+          ],
+        },
+        {
+          name: "Pineapple Vodka Drop",
+          category: "shot",
+          alcohol_base: "vodka",
+          steps: [
             "Pour 1 oz vodka into shaker with ice",
             "Add 0.5 oz pineapple juice",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Orange Cream Shot",
-        "category": "shot",
-        "alcohol_base": "vodka",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Orange Cream Shot",
+          category: "shot",
+          alcohol_base: "vodka",
+          steps: [
             "Pour 1 oz vodka into shaker with ice",
             "Add splash orange juice",
             "Add splash Sprite",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Tequila Soda",
-        "category": "cocktail",
-        "alcohol_base": "tequila",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Tequila Soda",
+          category: "cocktail",
+          alcohol_base: "tequila",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz tequila",
             "Fill with club soda (~12 oz)",
-            "Garnish with lime wedge"
-        ]
-    },
-    {
-        "name": "Margarita (Party Style)",
-        "category": "cocktail",
-        "alcohol_base": "tequila",
-        "steps": [
+            "Garnish with lime wedge",
+          ],
+        },
+        {
+          name: "Margarita (Party Style)",
+          category: "cocktail",
+          alcohol_base: "tequila",
+          steps: [
             "Rim cup with Taj\u00edn (optional) and add ice",
             "Pour 1.5 oz tequila",
             "Squeeze juice from a few lime wedges",
-            "Fill with Sprite (~10 oz)"
-        ]
-    },
-    {
-        "name": "Paloma (Easy)",
-        "category": "cocktail",
-        "alcohol_base": "tequila",
-        "steps": [
+            "Fill with Sprite (~10 oz)",
+          ],
+        },
+        {
+          name: "Paloma (Easy)",
+          category: "cocktail",
+          alcohol_base: "tequila",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz tequila",
             "Add 6 oz Sprite",
             "Squeeze juice from a few lime wedges",
-            "Top with club soda to fill"
-        ]
-    },
-    {
-        "name": "Tequila Coke",
-        "category": "cocktail",
-        "alcohol_base": "tequila",
-        "steps": [
+            "Top with club soda to fill",
+          ],
+        },
+        {
+          name: "Tequila Coke",
+          category: "cocktail",
+          alcohol_base: "tequila",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz tequila",
             "Fill with Coke (~12 oz)",
-            "Squeeze lime wedge"
-        ]
-    },
-    {
-        "name": "Tequila Pineapple",
-        "category": "cocktail",
-        "alcohol_base": "tequila",
-        "steps": [
+            "Squeeze lime wedge",
+          ],
+        },
+        {
+          name: "Tequila Pineapple",
+          category: "cocktail",
+          alcohol_base: "tequila",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz tequila",
-            "Fill with pineapple juice (~10 oz)"
-        ]
-    },
-    {
-        "name": "Tequila & Taj\u00edn",
-        "category": "shot",
-        "alcohol_base": "tequila",
-        "steps": [
+            "Fill with pineapple juice (~10 oz)",
+          ],
+        },
+        {
+          name: "Tequila & Taj\u00edn",
+          category: "shot",
+          alcohol_base: "tequila",
+          steps: [
             "Pour 1 oz tequila into shot glass",
             "Dip lime wedge in Taj\u00edn",
-            "Shoot tequila, then bite lime"
-        ]
-    },
-    {
-        "name": "Tequila Sunrise Shooter",
-        "category": "shot",
-        "alcohol_base": "tequila",
-        "steps": [
+            "Shoot tequila, then bite lime",
+          ],
+        },
+        {
+          name: "Tequila Sunrise Shooter",
+          category: "shot",
+          alcohol_base: "tequila",
+          steps: [
             "Pour 1 oz tequila into shot glass",
             "Add splash orange juice",
-            "Add drop cranberry juice for color"
-        ]
-    },
-    {
-        "name": "Pineapple Tequila Drop",
-        "category": "shot",
-        "alcohol_base": "tequila",
-        "steps": [
+            "Add drop cranberry juice for color",
+          ],
+        },
+        {
+          name: "Pineapple Tequila Drop",
+          category: "shot",
+          alcohol_base: "tequila",
+          steps: [
             "Pour 1 oz tequila into shaker with ice",
             "Add 0.5 oz pineapple juice",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Tequila Lime Shooter",
-        "category": "shot",
-        "alcohol_base": "tequila",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Tequila Lime Shooter",
+          category: "shot",
+          alcohol_base: "tequila",
+          steps: [
             "Pour 1 oz tequila into shaker with ice",
             "Add squeeze lime juice",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Paleta Shot",
-        "category": "shot",
-        "alcohol_base": "tequila",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Paleta Shot",
+          category: "shot",
+          alcohol_base: "tequila",
+          steps: [
             "Rim shot glass with Taj\u00edn",
             "Pour 1 oz tequila",
-            "Add squeeze lime juice"
-        ]
-    },
-    {
-        "name": "Whiskey & Coke",
-        "category": "cocktail",
-        "alcohol_base": "whiskey",
-        "steps": [
+            "Add squeeze lime juice",
+          ],
+        },
+        {
+          name: "Whiskey & Coke",
+          category: "cocktail",
+          alcohol_base: "whiskey",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz whiskey",
-            "Fill with Coke (~12 oz)"
-        ]
-    },
-    {
-        "name": "Whiskey Sour (16oz Style)",
-        "category": "cocktail",
-        "alcohol_base": "whiskey",
-        "steps": [
+            "Fill with Coke (~12 oz)",
+          ],
+        },
+        {
+          name: "Whiskey Sour (16oz Style)",
+          category: "cocktail",
+          alcohol_base: "whiskey",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz whiskey",
             "Squeeze juice from a few lemon wedges",
             "Add 1 oz simple syrup",
-            "Fill rest with club soda (~8 oz)"
-        ]
-    },
-    {
-        "name": "Whiskey Ginger",
-        "category": "cocktail",
-        "alcohol_base": "whiskey",
-        "steps": [
+            "Fill rest with club soda (~8 oz)",
+          ],
+        },
+        {
+          name: "Whiskey Ginger",
+          category: "cocktail",
+          alcohol_base: "whiskey",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz whiskey",
             "Add 6 oz ginger beer",
             "Top with Sprite (~4 oz)",
-            "Garnish with lime wedge"
-        ]
-    },
-    {
-        "name": "Whiskey Cranberry",
-        "category": "cocktail",
-        "alcohol_base": "whiskey",
-        "steps": [
+            "Garnish with lime wedge",
+          ],
+        },
+        {
+          name: "Whiskey Cranberry",
+          category: "cocktail",
+          alcohol_base: "whiskey",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz whiskey",
-            "Fill with cranberry juice (~10 oz)"
-        ]
-    },
-    {
-        "name": "Lynchburg Lemonade",
-        "category": "cocktail",
-        "alcohol_base": "whiskey",
-        "steps": [
+            "Fill with cranberry juice (~10 oz)",
+          ],
+        },
+        {
+          name: "Lynchburg Lemonade",
+          category: "cocktail",
+          alcohol_base: "whiskey",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz whiskey",
             "Add squeeze of lemon juice",
-            "Top with Sprite (~10 oz)"
-        ]
-    },
-    {
-        "name": "Whiskey Popper",
-        "category": "shot",
-        "alcohol_base": "whiskey",
-        "steps": [
+            "Top with Sprite (~10 oz)",
+          ],
+        },
+        {
+          name: "Whiskey Popper",
+          category: "shot",
+          alcohol_base: "whiskey",
+          steps: [
             "Pour 1 oz whiskey into shot glass",
-            "Top with splash Sprite"
-        ]
-    },
-    {
-        "name": "Citrus Sour Shot",
-        "category": "shot",
-        "alcohol_base": "whiskey",
-        "steps": [
+            "Top with splash Sprite",
+          ],
+        },
+        {
+          name: "Citrus Sour Shot",
+          category: "shot",
+          alcohol_base: "whiskey",
+          steps: [
             "Add ice to a shaker",
             "Pour in 1 oz whiskey",
             "Add squeeze lemon juice and a dash of Sprite",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Whiskey Cran Drop",
-        "category": "shot",
-        "alcohol_base": "whiskey",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Whiskey Cran Drop",
+          category: "shot",
+          alcohol_base: "whiskey",
+          steps: [
             "Pour 1 oz whiskey into shot glass",
-            "Top with splash cranberry juice"
-        ]
-    },
-    {
-        "name": "Whiskey Coke Shot",
-        "category": "shot",
-        "alcohol_base": "whiskey",
-        "steps": [
-            "Pour 1 oz whiskey into shot glass",
-            "Top with splash Coke"
-        ]
-    },
-    {
-        "name": "Whiskey Orange Burst",
-        "category": "shot",
-        "alcohol_base": "whiskey",
-        "steps": [
+            "Top with splash cranberry juice",
+          ],
+        },
+        {
+          name: "Whiskey Coke Shot",
+          category: "shot",
+          alcohol_base: "whiskey",
+          steps: ["Pour 1 oz whiskey into shot glass", "Top with splash Coke"],
+        },
+        {
+          name: "Whiskey Orange Burst",
+          category: "shot",
+          alcohol_base: "whiskey",
+          steps: [
             "Pour 1 oz whiskey into shaker with ice",
             "Add splash orange juice",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Rum & Coke (Cuba Libre)",
-        "category": "cocktail",
-        "alcohol_base": "rum",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Rum & Coke (Cuba Libre)",
+          category: "cocktail",
+          alcohol_base: "rum",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz rum",
             "Fill with Coke (~12 oz)",
-            "Garnish with lime wedge"
-        ]
-    },
-    {
-        "name": "Pineapple Rum Punch",
-        "category": "cocktail",
-        "alcohol_base": "rum",
-        "steps": [
+            "Garnish with lime wedge",
+          ],
+        },
+        {
+          name: "Pineapple Rum Punch",
+          category: "cocktail",
+          alcohol_base: "rum",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz rum",
             "Add 6 oz pineapple juice",
             "Add 4 oz Sprite",
-            "Garnish with lime wedge"
-        ]
-    },
-    {
-        "name": "Rum Punch (16oz Style)",
-        "category": "cocktail",
-        "alcohol_base": "rum",
-        "steps": [
+            "Garnish with lime wedge",
+          ],
+        },
+        {
+          name: "Rum Punch (16oz Style)",
+          category: "cocktail",
+          alcohol_base: "rum",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1 oz rum",
             "Add 3 oz orange juice",
             "Add 3 oz pineapple juice",
             "Fill with Sprite (~6 oz)",
-            "Garnish with lime wedge"
-        ]
-    },
-    {
-        "name": "Rum Pineapple Coke",
-        "category": "cocktail",
-        "alcohol_base": "rum",
-        "steps": [
+            "Garnish with lime wedge",
+          ],
+        },
+        {
+          name: "Rum Pineapple Coke",
+          category: "cocktail",
+          alcohol_base: "rum",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz rum",
             "Add 6 oz pineapple juice",
-            "Top with Coke (~6 oz)"
-        ]
-    },
-    {
-        "name": "Rum Sprite Twist",
-        "category": "cocktail",
-        "alcohol_base": "rum",
-        "steps": [
+            "Top with Coke (~6 oz)",
+          ],
+        },
+        {
+          name: "Rum Sprite Twist",
+          category: "cocktail",
+          alcohol_base: "rum",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1.5 oz rum",
             "Fill with Sprite (~12 oz)",
-            "Squeeze lime wedge"
-        ]
-    },
-    {
-        "name": "Pineapple Rum Drop",
-        "category": "shot",
-        "alcohol_base": "rum",
-        "steps": [
+            "Squeeze lime wedge",
+          ],
+        },
+        {
+          name: "Pineapple Rum Drop",
+          category: "shot",
+          alcohol_base: "rum",
+          steps: [
             "Add ice to a shaker",
             "Pour in 1 oz rum",
             "Add 0.5 oz pineapple juice",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Cuba Libre Shooter",
-        "category": "shot",
-        "alcohol_base": "rum",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Cuba Libre Shooter",
+          category: "shot",
+          alcohol_base: "rum",
+          steps: [
             "Pour 1 oz rum into shot glass",
             "Add splash Coke",
-            "Squeeze lime wedge on top"
-        ]
-    },
-    {
-        "name": "Rum Orange Drop",
-        "category": "shot",
-        "alcohol_base": "rum",
-        "steps": [
+            "Squeeze lime wedge on top",
+          ],
+        },
+        {
+          name: "Rum Orange Drop",
+          category: "shot",
+          alcohol_base: "rum",
+          steps: [
             "Pour 1 oz rum into shaker with ice",
             "Add splash orange juice",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Rum Cranberry Splash",
-        "category": "shot",
-        "alcohol_base": "rum",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Rum Cranberry Splash",
+          category: "shot",
+          alcohol_base: "rum",
+          steps: [
             "Pour 1 oz rum into shot glass",
-            "Top with splash cranberry juice"
-        ]
-    },
-    {
-        "name": "Rum Sprite Shooter",
-        "category": "shot",
-        "alcohol_base": "rum",
-        "steps": [
-            "Pour 1 oz rum into shot glass",
-            "Top with splash Sprite"
-        ]
-    },
-    {
-        "name": "Vegas Sunrise",
-        "category": "cocktail",
-        "alcohol_base": "mixed",
-        "steps": [
+            "Top with splash cranberry juice",
+          ],
+        },
+        {
+          name: "Rum Sprite Shooter",
+          category: "shot",
+          alcohol_base: "rum",
+          steps: ["Pour 1 oz rum into shot glass", "Top with splash Sprite"],
+        },
+        {
+          name: "Vegas Sunrise",
+          category: "cocktail",
+          alcohol_base: "mixed",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1 oz vodka and 1 oz tequila",
             "Add 8 oz orange juice",
             "Splash cranberry juice for color",
-            "Fill remainder with Sprite (~3\u20134 oz)"
-        ]
-    },
-    {
-        "name": "Rum & Whiskey Punch",
-        "category": "cocktail",
-        "alcohol_base": "mixed",
-        "steps": [
+            "Fill remainder with Sprite (~3\u20134 oz)",
+          ],
+        },
+        {
+          name: "Rum & Whiskey Punch",
+          category: "cocktail",
+          alcohol_base: "mixed",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1 oz rum and 1 oz whiskey",
             "Add 6 oz pineapple juice",
-            "Fill with Sprite (~6 oz)"
-        ]
-    },
-    {
-        "name": "Long Island (Party Style)",
-        "category": "cocktail",
-        "alcohol_base": "mixed",
-        "steps": [
+            "Fill with Sprite (~6 oz)",
+          ],
+        },
+        {
+          name: "Long Island (Party Style)",
+          category: "cocktail",
+          alcohol_base: "mixed",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 0.5 oz each vodka, tequila, rum, whiskey",
             "Fill with Coke (~6 oz)",
-            "Top with Sprite splash"
-        ]
-    },
-    {
-        "name": "Jungle Juice (Easy)",
-        "category": "cocktail",
-        "alcohol_base": "mixed",
-        "steps": [
+            "Top with Sprite splash",
+          ],
+        },
+        {
+          name: "Jungle Juice (Easy)",
+          category: "cocktail",
+          alcohol_base: "mixed",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1 oz vodka",
             "Pour 1 oz rum",
             "Add 4 oz cranberry juice",
             "Add 4 oz pineapple juice",
-            "Top with Sprite (~2 oz)"
-        ]
-    },
-    {
-        "name": "Sunset Punch",
-        "category": "cocktail",
-        "alcohol_base": "mixed",
-        "steps": [
+            "Top with Sprite (~2 oz)",
+          ],
+        },
+        {
+          name: "Sunset Punch",
+          category: "cocktail",
+          alcohol_base: "mixed",
+          steps: [
             "Add ice to a 16oz cup",
             "Pour 1 oz vodka",
             "Pour 1 oz tequila",
             "Add 4 oz cranberry juice",
             "Add 4 oz pineapple juice",
-            "Top with Sprite (~2 oz)"
-        ]
-    },
-    {
-        "name": "O.C. Slammer",
-        "category": "shot",
-        "alcohol_base": "mixed",
-        "steps": [
+            "Top with Sprite (~2 oz)",
+          ],
+        },
+        {
+          name: "O.C. Slammer",
+          category: "shot",
+          alcohol_base: "mixed",
+          steps: [
             "Add ice to a shaker",
             "Pour in 0.5 oz vodka and 0.5 oz rum",
             "Add splash orange juice",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Sunset Shooter",
-        "category": "shot",
-        "alcohol_base": "mixed",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Sunset Shooter",
+          category: "shot",
+          alcohol_base: "mixed",
+          steps: [
             "Add ice to a shaker",
             "Pour in 0.5 oz vodka and 0.5 oz tequila",
             "Add small splash cranberry juice",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Tropical Bomb",
-        "category": "shot",
-        "alcohol_base": "mixed",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Tropical Bomb",
+          category: "shot",
+          alcohol_base: "mixed",
+          steps: [
             "Add ice to a shaker",
             "Pour in 0.5 oz vodka and 0.5 oz rum",
             "Add splash pineapple juice",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Pineapple Bomb",
-        "category": "shot",
-        "alcohol_base": "mixed",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Pineapple Bomb",
+          category: "shot",
+          alcohol_base: "mixed",
+          steps: [
             "Add ice to a shaker",
             "Pour in 0.5 oz vodka and 0.5 oz tequila",
             "Add splash pineapple juice",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Citrus Blast",
-        "category": "shot",
-        "alcohol_base": "mixed",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Citrus Blast",
+          category: "shot",
+          alcohol_base: "mixed",
+          steps: [
             "Add ice to a shaker",
             "Pour in 0.5 oz vodka and 0.5 oz rum",
             "Add splash orange juice",
             "Add splash Sprite",
-            "Shake and strain into shot glass"
-        ]
-    },
-    {
-        "name": "Virgin Sunrise",
-        "category": "mocktails",
-        "alcohol_base": "none",
-        "steps": [
+            "Shake and strain into shot glass",
+          ],
+        },
+        {
+          name: "Virgin Sunrise",
+          category: "mocktails",
+          alcohol_base: "none",
+          steps: [
             "Add ice to a 16oz cup",
             "Add orange juice",
             "Add a small splash of cranberry juice for color",
-            "Stir gently for a layered effect"
-        ]
-    },
-    {
-        "name": "Cran-Pine Refresher",
-        "category": "mocktails",
-        "alcohol_base": "none",
-        "steps": [
+            "Stir gently for a layered effect",
+          ],
+        },
+        {
+          name: "Cran-Pine Refresher",
+          category: "mocktails",
+          alcohol_base: "none",
+          steps: [
             "Add ice to a 16oz cup",
             "Add 2 oz cranberry juice and 2 oz pineapple juice",
             "Top with Sprite to fill",
-            "Garnish with lime wedge"
-        ]
-    },
-    {
-        "name": "Virgin Cuba Libre",
-        "category": "mocktails",
-        "alcohol_base": "none",
-        "steps": [
+            "Garnish with lime wedge",
+          ],
+        },
+        {
+          name: "Virgin Cuba Libre",
+          category: "mocktails",
+          alcohol_base: "none",
+          steps: [
             "Add ice to a 16oz cup",
             "Fill with Coke or Diet Coke",
-            "Squeeze lime wedge on top"
-        ]
-    },
-    {
-        "name": "Shirley Temple",
-        "category": "mocktails",
-        "alcohol_base": "none",
-        "steps": [
+            "Squeeze lime wedge on top",
+          ],
+        },
+        {
+          name: "Shirley Temple",
+          category: "mocktails",
+          alcohol_base: "none",
+          steps: [
             "Add ice to a 16oz cup",
             "Fill with Sprite (~12 oz)",
             "Add splash cranberry juice",
-            "Garnish with lime wedge"
-        ]
-    },
-    {
-        "name": "Pine-Lime Fizz",
-        "category": "mocktails",
-        "alcohol_base": "none",
-        "steps": [
+            "Garnish with lime wedge",
+          ],
+        },
+        {
+          name: "Pine-Lime Fizz",
+          category: "mocktails",
+          alcohol_base: "none",
+          steps: [
             "Add ice to a 16oz cup",
             "Add 6 oz pineapple juice",
             "Top with Sprite (~6 oz)",
-            "Squeeze lime wedge"
-        ]
-    },
-    {
-        "name": "Light Beer",
-        "category": "keep it simple",
-        "alcohol_base": "none",
-        "steps": [
+            "Squeeze lime wedge",
+          ],
+        },
+        {
+          name: "Light Beer",
+          category: "keep it simple",
+          alcohol_base: "none",
+          steps: [
             "Open can or bottle",
             "Pour into cup (optional)",
-            "Enjoy chilled"
-        ]
-    },
-    {
-        "name": "Mexican Beer",
-        "category": "keep it simple",
-        "alcohol_base": "none",
-        "steps": [
-            "Open bottle",
-            "Add lime wedge if desired",
-            "Enjoy chilled"
-        ]
-    },
-    {
-        "name": "Hard Seltzer",
-        "category": "keep it simple",
-        "alcohol_base": "none",
-        "steps": [
-            "Open can",
-            "Pour into cup (optional)",
-            "Enjoy chilled"
-        ]
-    },
-    {
-        "name": "Red Wine",
-        "category": "keep it simple",
-        "alcohol_base": "none",
-        "steps": [
+            "Enjoy chilled",
+          ],
+        },
+        {
+          name: "Mexican Beer",
+          category: "keep it simple",
+          alcohol_base: "none",
+          steps: ["Open bottle", "Add lime wedge if desired", "Enjoy chilled"],
+        },
+        {
+          name: "Hard Seltzer",
+          category: "keep it simple",
+          alcohol_base: "none",
+          steps: ["Open can", "Pour into cup (optional)", "Enjoy chilled"],
+        },
+        {
+          name: "Red Wine",
+          category: "keep it simple",
+          alcohol_base: "none",
+          steps: [
             "Open bottle of red wine",
             "Pour into cup",
-            "Serve at room temp or lightly chilled"
-        ]
-    },
-    {
-        "name": "White Wine",
-        "category": "keep it simple",
-        "alcohol_base": "none",
-        "steps": [
+            "Serve at room temp or lightly chilled",
+          ],
+        },
+        {
+          name: "White Wine",
+          category: "keep it simple",
+          alcohol_base: "none",
+          steps: [
             "Open bottle of white wine",
             "Pour into cup",
-            "Serve chilled"
-        ]
-    }
-];
+            "Serve chilled",
+          ],
+        },
+      ];
     </script>
-</body>
+  </body>
 </html>
