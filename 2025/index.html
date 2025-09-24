@@ -39,6 +39,24 @@
         .pulse-hover:hover {
             animation: pulse 1s infinite;
         }
+        
+        /* Accordion animations */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.open {
+            max-height: 2000px;
+            transition: max-height 0.5s ease-in;
+        }
+        .accordion-arrow {
+            transition: transform 0.3s ease;
+        }
+        .accordion-arrow.rotate {
+            transform: rotate(180deg);
+        }
+        
         body {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             min-height: 100vh;
@@ -56,7 +74,7 @@
                 After the Thursday night activities wrap up... the fun gets even better! Join us in our decked-out suite for music, lights, drinks, and good vibes. You don't want to miss this!
             </p>
             
-            <div class="mt-6 mb-8">
+            <div class="mt-6">
                 <div id="rsvpSection" class="hidden transition-all duration-500">
                     <div class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500">
                         🌟 <span id="count">0</span> Improvers are in! 🌟 
@@ -85,24 +103,58 @@
             </div>
         </div>
         
-        <div class="bg-gradient-to-r from-purple-900/60 to-pink-900/60 backdrop-blur-sm p-4 rounded-xl border border-pink-500/40 shadow-lg shadow-pink-500/20">
+        <div class="bg-gradient-to-r from-purple-900/60 to-pink-900/60 backdrop-blur-sm p-4 mb-8 rounded-xl border border-pink-500/40 shadow-lg shadow-pink-500/20">
             <h3 class="text-xl font-bold text-cyan-300 mb-2">Event Details</h3>
-            <div class="flex flex-col md:flex-row justify-center gap-4 text-white">
-                <div class="flex items-center justify-center">
+            <div class="flex flex-col md:flex-row gap-4 text-white">
+                <div class="flex items-center">
                     <span class="text-pink-400 mr-2">👥</span>
                     <span class="font-semibold">Hosted by:</span>
                     <span class="ml-2 text-cyan-200">Jem & Steele</span>
                 </div>
-                <div class="flex items-center justify-center">
+                <div class="flex items-center">
                     <span class="text-pink-400 mr-2">🕒</span>
                     <span class="font-semibold">When:</span>
                     <span class="ml-2 text-cyan-200">Thursday night after your event</span>
                 </div>
-                <div class="flex items-center justify-center">
+                <div class="flex items-center">
                     <span class="text-pink-400 mr-2">🏨</span>
                     <span class="font-semibold">Room:</span>
                     <span id="roomNumber" class="ml-2 text-cyan-200 glow-text">Stay-tuned</span>
                 </div>
+            </div>
+        </div>
+        
+        <!-- Venmo Donation Section -->
+        <div class="w-full max-w-2xl mx-auto mb-8">
+            <div class="bg-gradient-to-r from-green-900/60 to-emerald-900/60 backdrop-blur-sm p-6 rounded-xl border border-green-500/30 shadow-lg shadow-green-500/20">
+                <h3 class="text-xl font-bold text-green-300 mb-3 text-center">🍹 Help Stock the Bar! 💚</h3>
+                <p class="text-gray-300 text-center mb-4">
+                    Want to help us keep the drinks flowing? Any contribution helps cover the party supplies!
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-3">
+                    <a href="venmo://paycharge?txn=pay&recipients=jemkegawa&amount=&note=Vegas%20Room%20Party%202025" 
+                       class="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-green-500/30 pulse-hover">
+                        💚 Venmo
+                    </a>
+                    <a href="https://paypal.me/manofsteele86" target="_blank" rel="noopener noreferrer"
+                       class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full font-bold text-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30 pulse-hover">
+                        💙 PayPal
+                    </a>
+                </div>
+                <p class="text-xs text-gray-400 text-center mt-2">
+                    @jemkegawa • paypal.me/manofsteele86 • Completely optional!
+                </p>
+            </div>
+        </div>
+        
+        <!-- Drinks Menu Section -->
+        <div class="w-full max-w-4xl mx-auto mb-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8 font-['Permanent_Marker'] text-center text-cyan-300">
+                🍹 Drink Menu 🍸
+            </h2>
+            
+            <div id="drinksMenu" class="space-y-4">
+                <!-- Menu will be dynamically generated here -->
             </div>
         </div>
     </main>
@@ -165,7 +217,8 @@
                 // Check if we have room data and it has a number property
                 if (roomData && roomData.length > 0 && roomData[0].number) {
                     const roomNumber = roomData[0].number;
-                    roomNumberElement.textContent = `Room ${roomNumber}`;
+                    const tower = roomData[0].tower;
+                    roomNumberElement.textContent = `Room: ${roomNumber} ${tower}`;
                     roomNumberElement.classList.add('text-xl');
                 } else {
                     roomNumberElement.textContent = 'Stay-tuned';
@@ -319,8 +372,842 @@
             rsvpdSection.classList.add('animate-pulse-in');
         }
         
+        // Load drinks data (now synchronous since it's embedded)
+        function loadDrinksData() {
+            generateDrinksMenu();
+        }
+        
+        // Generate the drinks menu HTML
+        function generateDrinksMenu() {
+            const menuContainer = document.getElementById('drinksMenu');
+            
+            // Group drinks by category and alcohol_base
+            const groupedDrinks = groupDrinksByCategory();
+            
+            let menuHTML = '';
+            
+            Object.keys(groupedDrinks).forEach((category, categoryIndex) => {
+                const categoryIcons = {
+                    'cocktail': '🍸',
+                    'shot': '🥃',
+                    'mocktails': '🧃',
+                    'keep it simple': '🍺'
+                };
+                const categoryNames = {
+                    'cocktail': 'Cocktails',
+                    'shot': 'Shots',
+                    'mocktails': 'Mocktails',
+                    'keep it simple': 'Keep It Simple'
+                };
+                const categoryIcon = categoryIcons[category] || '🍹';
+                const categoryName = categoryNames[category] || category;
+                
+                menuHTML += `
+                    <div class="bg-black/40 backdrop-blur-sm rounded-2xl border border-pink-500/30 shadow-lg shadow-pink-500/20 overflow-hidden">
+                        <button class="w-full px-6 py-4 text-left bg-gradient-to-r from-purple-900/60 to-pink-900/60 hover:from-purple-800/70 hover:to-pink-800/70 transition-all duration-300 flex justify-between items-center" 
+                                onclick="toggleAccordion('category-${categoryIndex}')">
+                            <span class="text-xl md:text-2xl font-bold text-cyan-300">
+                                ${categoryIcon} ${categoryName}
+                            </span>
+                            <span class="accordion-arrow text-pink-400 text-2xl" id="arrow-category-${categoryIndex}">▼</span>
+                        </button>
+                        <div class="accordion-content" id="category-${categoryIndex}">
+                            <div class="p-4 space-y-3">
+                                ${generateCategoryContent(groupedDrinks[category], categoryIndex)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            menuContainer.innerHTML = menuHTML;
+        }
+        
+        // Group drinks by category and alcohol_base
+        function groupDrinksByCategory() {
+            const grouped = {};
+            
+            drinksData.forEach(drink => {
+                if (!grouped[drink.category]) {
+                    grouped[drink.category] = {};
+                }
+                if (!grouped[drink.category][drink.alcohol_base]) {
+                    grouped[drink.category][drink.alcohol_base] = [];
+                }
+                grouped[drink.category][drink.alcohol_base].push(drink);
+            });
+            
+            return grouped;
+        }
+        
+        // Generate category content (with or without alcohol base sub-accordions)
+        function generateCategoryContent(alcoholBases, categoryIndex) {
+            // Check if this category has alcohol_base "none" - if so, skip sub-accordions
+            const hasNoneAlcoholBase = Object.keys(alcoholBases).includes('none');
+            
+            if (hasNoneAlcoholBase) {
+                // For categories with alcohol_base "none", display drinks directly in a grid
+                const allDrinks = Object.values(alcoholBases).flat();
+                return `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        ${generateDrinkCards(allDrinks)}
+                    </div>
+                `;
+            } else {
+                // For other categories, use the alcohol base sub-accordions
+                return generateAlcoholBaseAccordions(alcoholBases, categoryIndex);
+            }
+        }
+        
+        // Generate alcohol base sub-accordions
+        function generateAlcoholBaseAccordions(alcoholBases, categoryIndex) {
+            let html = '';
+            
+            Object.keys(alcoholBases).forEach((alcoholBase, baseIndex) => {
+                const drinks = alcoholBases[alcoholBase];
+                const baseIcon = getAlcoholBaseIcon(alcoholBase);
+                const baseName = capitalizeFirst(alcoholBase);
+                const accordionId = `base-${categoryIndex}-${baseIndex}`;
+                
+                html += `
+                    <div class="bg-gray-900/50 rounded-xl border border-cyan-500/20 overflow-hidden">
+                        <button class="w-full px-4 py-3 text-left bg-gradient-to-r from-gray-800/60 to-gray-700/60 hover:from-gray-700/70 hover:to-gray-600/70 transition-all duration-300 flex justify-between items-center" 
+                                onclick="toggleAccordion('${accordionId}')">
+                            <span class="text-lg font-semibold text-pink-300">
+                                ${baseIcon} ${baseName} (${drinks.length})
+                            </span>
+                            <span class="accordion-arrow text-cyan-400" id="arrow-${accordionId}">▼</span>
+                        </button>
+                        <div class="accordion-content" id="${accordionId}">
+                            <div class="p-3">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    ${generateDrinkCards(drinks)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+        
+        // Generate individual drink cards
+        function generateDrinkCards(drinks) {
+            return drinks.map(drink => `
+                <div class="bg-gradient-to-br from-purple-900/40 to-pink-900/40 rounded-lg p-4 border border-pink-400/20 hover:border-pink-400/40 transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/20">
+                    <h4 class="text-lg font-bold text-cyan-100 mb-3">${drink.name}</h4>
+                    <ol class="text-gray-300 space-y-1 text-sm text-left">
+                        ${drink.steps.map((step, index) => `
+                            <li class="flex items-start">
+                                <span class="inline-block w-6 h-6 bg-pink-500 text-white text-xs font-bold rounded-full flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">${index + 1}</span>
+                                <span>${step}</span>
+                            </li>
+                        `).join('')}
+                    </ol>
+                </div>
+            `).join('');
+        }
+        
+        // Get icon for alcohol base
+        function getAlcoholBaseIcon(alcoholBase) {
+            const icons = {
+                'vodka': '🍸',
+                'tequila': '🌵',
+                'whiskey': '🥃',
+                'rum': '🏴‍☠️',
+                'mixed': '🎭'
+            };
+            return icons[alcoholBase] || '🍹';
+        }
+        
+        // Capitalize first letter
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+        
+        // Toggle accordion functionality
+        function toggleAccordion(accordionId) {
+            const content = document.getElementById(accordionId);
+            const arrow = document.getElementById(`arrow-${accordionId}`);
+            
+            if (content.classList.contains('open')) {
+                // Collapsing: close this accordion and all child accordions
+                content.classList.remove('open');
+                arrow.classList.remove('rotate');
+                
+                // If this is a category accordion, close all child alcohol base accordions
+                if (accordionId.startsWith('category-')) {
+                    const childAccordions = content.querySelectorAll('.accordion-content.open');
+                    childAccordions.forEach(childContent => {
+                        const childId = childContent.id;
+                        const childArrow = document.getElementById(`arrow-${childId}`);
+                        childContent.classList.remove('open');
+                        if (childArrow) {
+                            childArrow.classList.remove('rotate');
+                        }
+                    });
+                }
+            } else {
+                // Expanding: open this accordion
+                content.classList.add('open');
+                arrow.classList.add('rotate');
+            }
+        }
+        
         // Initialize the app
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', () => {
+            init();
+            loadDrinksData();
+        });
+
+        // Drinks Menu Functionality - Embedded Data
+        const drinksData = [
+    {
+        "name": "Vodka Soda",
+        "category": "cocktail",
+        "alcohol_base": "vodka",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz vodka",
+            "Fill with club soda (~12 oz)",
+            "Garnish with lime wedge"
+        ]
+    },
+    {
+        "name": "Vodka Cranberry",
+        "category": "cocktail",
+        "alcohol_base": "vodka",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz vodka",
+            "Add 8 oz cranberry juice",
+            "Top with club soda (~2\u20133 oz)",
+            "Garnish with lime wedge"
+        ]
+    },
+    {
+        "name": "Screwdriver",
+        "category": "cocktail",
+        "alcohol_base": "vodka",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz vodka",
+            "Add 10 oz orange juice",
+            "Top with Sprite splash (~2 oz)"
+        ]
+    },
+    {
+        "name": "Moscow Mule (Easy)",
+        "category": "cocktail",
+        "alcohol_base": "vodka",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz vodka",
+            "Add 6 oz ginger beer",
+            "Squeeze lime wedge",
+            "Top with club soda to fill"
+        ]
+    },
+    {
+        "name": "Vodka Sprite Lime",
+        "category": "cocktail",
+        "alcohol_base": "vodka",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz vodka",
+            "Fill with Sprite (~10 oz)",
+            "Squeeze lime wedge"
+        ]
+    },
+    {
+        "name": "Lemon Drop",
+        "category": "shot",
+        "alcohol_base": "vodka",
+        "steps": [
+            "Pour 1 oz vodka into a shot glass",
+            "Add squeeze of lemon juice",
+            "Optional: rim with sugar",
+            "Shoot and bite lemon wedge"
+        ]
+    },
+    {
+        "name": "Cranberry Kamikaze",
+        "category": "shot",
+        "alcohol_base": "vodka",
+        "steps": [
+            "Add ice to a shaker",
+            "Pour in 1 oz vodka",
+            "Add a splash of cranberry juice and Sprite",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Vodka Sprite Shot",
+        "category": "shot",
+        "alcohol_base": "vodka",
+        "steps": [
+            "Pour 1 oz vodka into a shot glass",
+            "Top with splash Sprite"
+        ]
+    },
+    {
+        "name": "Pineapple Vodka Drop",
+        "category": "shot",
+        "alcohol_base": "vodka",
+        "steps": [
+            "Pour 1 oz vodka into shaker with ice",
+            "Add 0.5 oz pineapple juice",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Orange Cream Shot",
+        "category": "shot",
+        "alcohol_base": "vodka",
+        "steps": [
+            "Pour 1 oz vodka into shaker with ice",
+            "Add splash orange juice",
+            "Add splash Sprite",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Tequila Soda",
+        "category": "cocktail",
+        "alcohol_base": "tequila",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz tequila",
+            "Fill with club soda (~12 oz)",
+            "Garnish with lime wedge"
+        ]
+    },
+    {
+        "name": "Margarita (Party Style)",
+        "category": "cocktail",
+        "alcohol_base": "tequila",
+        "steps": [
+            "Rim cup with Taj\u00edn (optional) and add ice",
+            "Pour 1.5 oz tequila",
+            "Squeeze juice from a few lime wedges",
+            "Fill with Sprite (~10 oz)"
+        ]
+    },
+    {
+        "name": "Paloma (Easy)",
+        "category": "cocktail",
+        "alcohol_base": "tequila",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz tequila",
+            "Add 6 oz Sprite",
+            "Squeeze juice from a few lime wedges",
+            "Top with club soda to fill"
+        ]
+    },
+    {
+        "name": "Tequila Coke",
+        "category": "cocktail",
+        "alcohol_base": "tequila",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz tequila",
+            "Fill with Coke (~12 oz)",
+            "Squeeze lime wedge"
+        ]
+    },
+    {
+        "name": "Tequila Pineapple",
+        "category": "cocktail",
+        "alcohol_base": "tequila",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz tequila",
+            "Fill with pineapple juice (~10 oz)"
+        ]
+    },
+    {
+        "name": "Tequila & Taj\u00edn",
+        "category": "shot",
+        "alcohol_base": "tequila",
+        "steps": [
+            "Pour 1 oz tequila into shot glass",
+            "Dip lime wedge in Taj\u00edn",
+            "Shoot tequila, then bite lime"
+        ]
+    },
+    {
+        "name": "Tequila Sunrise Shooter",
+        "category": "shot",
+        "alcohol_base": "tequila",
+        "steps": [
+            "Pour 1 oz tequila into shot glass",
+            "Add splash orange juice",
+            "Add drop cranberry juice for color"
+        ]
+    },
+    {
+        "name": "Pineapple Tequila Drop",
+        "category": "shot",
+        "alcohol_base": "tequila",
+        "steps": [
+            "Pour 1 oz tequila into shaker with ice",
+            "Add 0.5 oz pineapple juice",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Tequila Lime Shooter",
+        "category": "shot",
+        "alcohol_base": "tequila",
+        "steps": [
+            "Pour 1 oz tequila into shaker with ice",
+            "Add squeeze lime juice",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Paleta Shot",
+        "category": "shot",
+        "alcohol_base": "tequila",
+        "steps": [
+            "Rim shot glass with Taj\u00edn",
+            "Pour 1 oz tequila",
+            "Add squeeze lime juice"
+        ]
+    },
+    {
+        "name": "Whiskey & Coke",
+        "category": "cocktail",
+        "alcohol_base": "whiskey",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz whiskey",
+            "Fill with Coke (~12 oz)"
+        ]
+    },
+    {
+        "name": "Whiskey Sour (16oz Style)",
+        "category": "cocktail",
+        "alcohol_base": "whiskey",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz whiskey",
+            "Squeeze juice from a few lemon wedges",
+            "Add 1 oz simple syrup",
+            "Fill rest with club soda (~8 oz)"
+        ]
+    },
+    {
+        "name": "Whiskey Ginger",
+        "category": "cocktail",
+        "alcohol_base": "whiskey",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz whiskey",
+            "Add 6 oz ginger beer",
+            "Top with Sprite (~4 oz)",
+            "Garnish with lime wedge"
+        ]
+    },
+    {
+        "name": "Whiskey Cranberry",
+        "category": "cocktail",
+        "alcohol_base": "whiskey",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz whiskey",
+            "Fill with cranberry juice (~10 oz)"
+        ]
+    },
+    {
+        "name": "Lynchburg Lemonade",
+        "category": "cocktail",
+        "alcohol_base": "whiskey",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz whiskey",
+            "Add squeeze of lemon juice",
+            "Top with Sprite (~10 oz)"
+        ]
+    },
+    {
+        "name": "Whiskey Popper",
+        "category": "shot",
+        "alcohol_base": "whiskey",
+        "steps": [
+            "Pour 1 oz whiskey into shot glass",
+            "Top with splash Sprite"
+        ]
+    },
+    {
+        "name": "Citrus Sour Shot",
+        "category": "shot",
+        "alcohol_base": "whiskey",
+        "steps": [
+            "Add ice to a shaker",
+            "Pour in 1 oz whiskey",
+            "Add squeeze lemon juice and a dash of Sprite",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Whiskey Cran Drop",
+        "category": "shot",
+        "alcohol_base": "whiskey",
+        "steps": [
+            "Pour 1 oz whiskey into shot glass",
+            "Top with splash cranberry juice"
+        ]
+    },
+    {
+        "name": "Whiskey Coke Shot",
+        "category": "shot",
+        "alcohol_base": "whiskey",
+        "steps": [
+            "Pour 1 oz whiskey into shot glass",
+            "Top with splash Coke"
+        ]
+    },
+    {
+        "name": "Whiskey Orange Burst",
+        "category": "shot",
+        "alcohol_base": "whiskey",
+        "steps": [
+            "Pour 1 oz whiskey into shaker with ice",
+            "Add splash orange juice",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Rum & Coke (Cuba Libre)",
+        "category": "cocktail",
+        "alcohol_base": "rum",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz rum",
+            "Fill with Coke (~12 oz)",
+            "Garnish with lime wedge"
+        ]
+    },
+    {
+        "name": "Pineapple Rum Punch",
+        "category": "cocktail",
+        "alcohol_base": "rum",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz rum",
+            "Add 6 oz pineapple juice",
+            "Add 4 oz Sprite",
+            "Garnish with lime wedge"
+        ]
+    },
+    {
+        "name": "Rum Punch (16oz Style)",
+        "category": "cocktail",
+        "alcohol_base": "rum",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1 oz rum",
+            "Add 3 oz orange juice",
+            "Add 3 oz pineapple juice",
+            "Fill with Sprite (~6 oz)",
+            "Garnish with lime wedge"
+        ]
+    },
+    {
+        "name": "Rum Pineapple Coke",
+        "category": "cocktail",
+        "alcohol_base": "rum",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz rum",
+            "Add 6 oz pineapple juice",
+            "Top with Coke (~6 oz)"
+        ]
+    },
+    {
+        "name": "Rum Sprite Twist",
+        "category": "cocktail",
+        "alcohol_base": "rum",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1.5 oz rum",
+            "Fill with Sprite (~12 oz)",
+            "Squeeze lime wedge"
+        ]
+    },
+    {
+        "name": "Pineapple Rum Drop",
+        "category": "shot",
+        "alcohol_base": "rum",
+        "steps": [
+            "Add ice to a shaker",
+            "Pour in 1 oz rum",
+            "Add 0.5 oz pineapple juice",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Cuba Libre Shooter",
+        "category": "shot",
+        "alcohol_base": "rum",
+        "steps": [
+            "Pour 1 oz rum into shot glass",
+            "Add splash Coke",
+            "Squeeze lime wedge on top"
+        ]
+    },
+    {
+        "name": "Rum Orange Drop",
+        "category": "shot",
+        "alcohol_base": "rum",
+        "steps": [
+            "Pour 1 oz rum into shaker with ice",
+            "Add splash orange juice",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Rum Cranberry Splash",
+        "category": "shot",
+        "alcohol_base": "rum",
+        "steps": [
+            "Pour 1 oz rum into shot glass",
+            "Top with splash cranberry juice"
+        ]
+    },
+    {
+        "name": "Rum Sprite Shooter",
+        "category": "shot",
+        "alcohol_base": "rum",
+        "steps": [
+            "Pour 1 oz rum into shot glass",
+            "Top with splash Sprite"
+        ]
+    },
+    {
+        "name": "Vegas Sunrise",
+        "category": "cocktail",
+        "alcohol_base": "mixed",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1 oz vodka and 1 oz tequila",
+            "Add 8 oz orange juice",
+            "Splash cranberry juice for color",
+            "Fill remainder with Sprite (~3\u20134 oz)"
+        ]
+    },
+    {
+        "name": "Rum & Whiskey Punch",
+        "category": "cocktail",
+        "alcohol_base": "mixed",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1 oz rum and 1 oz whiskey",
+            "Add 6 oz pineapple juice",
+            "Fill with Sprite (~6 oz)"
+        ]
+    },
+    {
+        "name": "Long Island (Party Style)",
+        "category": "cocktail",
+        "alcohol_base": "mixed",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 0.5 oz each vodka, tequila, rum, whiskey",
+            "Fill with Coke (~6 oz)",
+            "Top with Sprite splash"
+        ]
+    },
+    {
+        "name": "Jungle Juice (Easy)",
+        "category": "cocktail",
+        "alcohol_base": "mixed",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1 oz vodka",
+            "Pour 1 oz rum",
+            "Add 4 oz cranberry juice",
+            "Add 4 oz pineapple juice",
+            "Top with Sprite (~2 oz)"
+        ]
+    },
+    {
+        "name": "Sunset Punch",
+        "category": "cocktail",
+        "alcohol_base": "mixed",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Pour 1 oz vodka",
+            "Pour 1 oz tequila",
+            "Add 4 oz cranberry juice",
+            "Add 4 oz pineapple juice",
+            "Top with Sprite (~2 oz)"
+        ]
+    },
+    {
+        "name": "O.C. Slammer",
+        "category": "shot",
+        "alcohol_base": "mixed",
+        "steps": [
+            "Add ice to a shaker",
+            "Pour in 0.5 oz vodka and 0.5 oz rum",
+            "Add splash orange juice",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Sunset Shooter",
+        "category": "shot",
+        "alcohol_base": "mixed",
+        "steps": [
+            "Add ice to a shaker",
+            "Pour in 0.5 oz vodka and 0.5 oz tequila",
+            "Add small splash cranberry juice",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Tropical Bomb",
+        "category": "shot",
+        "alcohol_base": "mixed",
+        "steps": [
+            "Add ice to a shaker",
+            "Pour in 0.5 oz vodka and 0.5 oz rum",
+            "Add splash pineapple juice",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Pineapple Bomb",
+        "category": "shot",
+        "alcohol_base": "mixed",
+        "steps": [
+            "Add ice to a shaker",
+            "Pour in 0.5 oz vodka and 0.5 oz tequila",
+            "Add splash pineapple juice",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Citrus Blast",
+        "category": "shot",
+        "alcohol_base": "mixed",
+        "steps": [
+            "Add ice to a shaker",
+            "Pour in 0.5 oz vodka and 0.5 oz rum",
+            "Add splash orange juice",
+            "Add splash Sprite",
+            "Shake and strain into shot glass"
+        ]
+    },
+    {
+        "name": "Virgin Sunrise",
+        "category": "mocktails",
+        "alcohol_base": "none",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Add orange juice",
+            "Add a small splash of cranberry juice for color",
+            "Stir gently for a layered effect"
+        ]
+    },
+    {
+        "name": "Cran-Pine Refresher",
+        "category": "mocktails",
+        "alcohol_base": "none",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Add 2 oz cranberry juice and 2 oz pineapple juice",
+            "Top with Sprite to fill",
+            "Garnish with lime wedge"
+        ]
+    },
+    {
+        "name": "Virgin Cuba Libre",
+        "category": "mocktails",
+        "alcohol_base": "none",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Fill with Coke or Diet Coke",
+            "Squeeze lime wedge on top"
+        ]
+    },
+    {
+        "name": "Shirley Temple",
+        "category": "mocktails",
+        "alcohol_base": "none",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Fill with Sprite (~12 oz)",
+            "Add splash cranberry juice",
+            "Garnish with lime wedge"
+        ]
+    },
+    {
+        "name": "Pine-Lime Fizz",
+        "category": "mocktails",
+        "alcohol_base": "none",
+        "steps": [
+            "Add ice to a 16oz cup",
+            "Add 6 oz pineapple juice",
+            "Top with Sprite (~6 oz)",
+            "Squeeze lime wedge"
+        ]
+    },
+    {
+        "name": "Light Beer",
+        "category": "keep it simple",
+        "alcohol_base": "none",
+        "steps": [
+            "Open can or bottle",
+            "Pour into cup (optional)",
+            "Enjoy chilled"
+        ]
+    },
+    {
+        "name": "Mexican Beer",
+        "category": "keep it simple",
+        "alcohol_base": "none",
+        "steps": [
+            "Open bottle",
+            "Add lime wedge if desired",
+            "Enjoy chilled"
+        ]
+    },
+    {
+        "name": "Hard Seltzer",
+        "category": "keep it simple",
+        "alcohol_base": "none",
+        "steps": [
+            "Open can",
+            "Pour into cup (optional)",
+            "Enjoy chilled"
+        ]
+    },
+    {
+        "name": "Red Wine",
+        "category": "keep it simple",
+        "alcohol_base": "none",
+        "steps": [
+            "Open bottle of red wine",
+            "Pour into cup",
+            "Serve at room temp or lightly chilled"
+        ]
+    },
+    {
+        "name": "White Wine",
+        "category": "keep it simple",
+        "alcohol_base": "none",
+        "steps": [
+            "Open bottle of white wine",
+            "Pour into cup",
+            "Serve chilled"
+        ]
+    }
+];
     </script>
 </body>
 </html>
