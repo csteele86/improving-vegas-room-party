@@ -7,9 +7,70 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        /* CSS Variables for Theme Support */
+        :root {
+            /* Dark Mode (Default) */
+            --bg-gradient-start: #0f172a;
+            --bg-gradient-end: #1e293b;
+            --text-primary: #ffffff;
+            --text-secondary: #e0e7ff;
+            --accent-pink: #ec4899;
+            --accent-purple: #a855f7;
+            --accent-cyan: #22d3ee;
+            --glow-primary: #e60073;
+            --glow-secondary: #ff4da6;
+            --card-bg: rgba(0, 0, 0, 0.3);
+            --card-border: rgba(236, 72, 153, 0.3);
+            --card-shadow: rgba(236, 72, 153, 0.2);
+            --button-gradient-start: #ec4899;
+            --button-gradient-end: #a855f7;
+            --gray-gradient-start: #4b5563;
+            --gray-gradient-end: #374151;
+            --green-gradient-start: rgba(6, 78, 59, 0.6);
+            --green-gradient-end: rgba(6, 95, 70, 0.6);
+            --blue-gradient-start: #3b82f6;
+            --blue-gradient-end: #2563eb;
+            --category-bg: rgba(88, 28, 135, 0.6);
+            --category-bg-end: rgba(157, 23, 77, 0.6);
+            --drink-card-bg: rgba(88, 28, 135, 0.4);
+            --drink-card-bg-end: rgba(157, 23, 77, 0.4);
+            --sub-accordion-bg: rgba(17, 24, 39, 0.5);
+            --sub-accordion-border: rgba(34, 211, 238, 0.2);
+        }
+        
+        /* Light Mode */
+        [data-theme="light"] {
+            --bg-gradient-start: #fdf2f8;
+            --bg-gradient-end: #ede9fe;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
+            --accent-pink: #db2777;
+            --accent-purple: #9333ea;
+            --accent-cyan: #0891b2;
+            --glow-primary: #db2777;
+            --glow-secondary: #ec4899;
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --card-border: rgba(219, 39, 119, 0.3);
+            --card-shadow: rgba(219, 39, 119, 0.15);
+            --button-gradient-start: #db2777;
+            --button-gradient-end: #9333ea;
+            --gray-gradient-start: #9ca3af;
+            --gray-gradient-end: #6b7280;
+            --green-gradient-start: rgba(134, 239, 172, 0.6);
+            --green-gradient-end: rgba(74, 222, 128, 0.6);
+            --blue-gradient-start: #60a5fa;
+            --blue-gradient-end: #3b82f6;
+            --category-bg: rgba(253, 242, 248, 0.8);
+            --category-bg-end: rgba(243, 232, 255, 0.8);
+            --drink-card-bg: rgba(253, 242, 248, 0.6);
+            --drink-card-bg-end: rgba(243, 232, 255, 0.6);
+            --sub-accordion-bg: rgba(248, 250, 252, 0.8);
+            --sub-accordion-border: rgba(8, 145, 178, 0.3);
+        }
+        
         @keyframes glow {
-            0%, 100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073; }
-            50% { text-shadow: 0 0 15px #fff, 0 0 25px #ff4da6, 0 0 35px #ff4da6, 0 0 45px #ff4da6; }
+            0%, 100% { text-shadow: 0 0 10px var(--glow-secondary), 0 0 20px var(--glow-secondary), 0 0 30px var(--glow-primary), 0 0 40px var(--glow-primary); }
+            50% { text-shadow: 0 0 15px var(--glow-secondary), 0 0 25px var(--glow-secondary), 0 0 35px var(--glow-secondary), 0 0 45px var(--glow-secondary); }
         }
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
@@ -58,90 +119,137 @@
         }
         
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
+            color: var(--text-primary);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Theme Toggle Styles */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 10px 16px;
+            border-radius: 50px;
+            border: 2px solid var(--card-border);
+            box-shadow: 0 4px 6px var(--card-shadow);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px var(--card-shadow);
+        }
+        
+        .theme-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .theme-toggle:hover .theme-icon {
+            transform: rotate(20deg);
+        }
+        
+        .theme-label {
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: var(--text-primary);
         }
     </style>
 </head>
 <body class="text-white font-['Poppins'] flex flex-col min-h-screen">
+    <!-- Theme Toggle Button -->
+    <div class="theme-toggle" onclick="toggleTheme()" role="button" aria-label="Toggle theme">
+        <span class="theme-icon" id="themeIcon">🌙</span>
+        <span class="theme-label" id="themeLabel">Dark</span>
+    </div>
+    
     <main class="flex-1 container mx-auto px-4 py-12 flex flex-col items-center justify-center text-center">
-        <h1 class="text-4xl md:text-6xl font-bold mb-6 font-['Permanent_Marker'] text-pink-500 glow-text">
+        <h1 class="text-4xl md:text-6xl font-bold mb-6 font-['Permanent_Marker'] glow-text" style="color: var(--accent-pink);">
             🎧 Vegas Room Party - 2025 🎉
         </h1>
         
-        <div class="max-w-2xl mx-auto bg-black/30 backdrop-blur-sm rounded-2xl p-8 mb-6 border border-pink-500/30 shadow-lg shadow-pink-500/20 flicker">
-            <p class="text-lg md:text-xl mb-8 leading-relaxed">
+        <div class="max-w-2xl mx-auto backdrop-blur-sm rounded-2xl p-8 mb-6 border shadow-lg flicker" style="background: var(--card-bg); border-color: var(--card-border); box-shadow: 0 10px 15px -3px var(--card-shadow);">
+            <p class="text-lg md:text-xl mb-8 leading-relaxed" style="color: var(--text-secondary);">
                 After the Thursday night activities wrap up... the fun gets even better! Join us in our decked-out suite for music, lights, drinks, and good vibes. You don't want to miss this!
             </p>
             
             <div class="mt-6">
                 <div id="rsvpSection" class="hidden transition-all duration-500">
-                    <div class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500">
+                    <div class="text-3xl font-bold mb-6 transition-all duration-500" style="color: var(--accent-cyan);">
                         🌟 <span id="count">0</span> Improvers are in! 🌟 
                     </div>
                 </div>
                 <div id="rsvpdSection" class="hidden transition-all duration-500">
-                    <div class="text-3xl font-bold text-cyan-400 mb-6 transition-all duration-500">
+                    <div class="text-3xl font-bold mb-6 transition-all duration-500" style="color: var(--accent-cyan);">
                         🎉 You are in! 🎉
                     </div>
-                    <div class="text-lg mb-6">
+                    <div class="text-lg mb-6" style="color: var(--text-secondary);">
                         Along with <span id="count2">0</span> Improvers! 
                     </div>
                 </div>
                 
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button id="rsvpIn" class="px-8 py-3 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full font-bold text-lg hover:from-pink-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-pink-500/30 pulse-hover">
+                    <button id="rsvpIn" class="px-8 py-3 rounded-full font-bold text-lg text-white transition-all duration-300 transform hover:scale-105 shadow-lg pulse-hover" style="background: linear-gradient(to right, var(--button-gradient-start), var(--button-gradient-end)); box-shadow: 0 10px 15px -3px var(--card-shadow);">
                         ✅ Count Me In!
                     </button>
-                    <button id="rsvpOut" class="px-8 py-3 bg-gradient-to-r from-gray-600 to-gray-700 rounded-full font-bold text-lg hover:from-gray-700 hover:to-gray-800 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-gray-500/20 pulse-hover">
+                    <button id="rsvpOut" class="px-8 py-3 rounded-full font-bold text-lg text-white transition-all duration-300 transform hover:scale-105 shadow-lg pulse-hover" style="background: linear-gradient(to right, var(--gray-gradient-start), var(--gray-gradient-end)); box-shadow: 0 10px 15px -3px rgba(107, 114, 128, 0.2);">
                         ❌ Nevermind
                     </button>
                 </div>
-                <div id="loading" class="mt-4 text-cyan-300 hidden">
+                <div id="loading" class="mt-4 hidden" style="color: var(--accent-cyan);">
                     Loading...
                 </div>
             </div>
         </div>
         
-        <div class="bg-gradient-to-r from-purple-900/60 to-pink-900/60 backdrop-blur-sm p-4 mb-8 rounded-xl border border-pink-500/40 shadow-lg shadow-pink-500/20">
-            <h3 class="text-xl font-bold text-cyan-300 mb-2">Event Details</h3>
-            <div class="flex flex-col md:flex-row gap-4 text-white">
+        <div class="backdrop-blur-sm p-4 mb-8 rounded-xl border shadow-lg" style="background: linear-gradient(to right, var(--category-bg), var(--category-bg-end)); border-color: var(--card-border); box-shadow: 0 10px 15px -3px var(--card-shadow);">
+            <h3 class="text-xl font-bold mb-2" style="color: var(--accent-cyan);">Event Details</h3>
+            <div class="flex flex-col md:flex-row gap-4" style="color: var(--text-primary);">
                 <div class="flex items-center">
-                    <span class="text-pink-400 mr-2">👥</span>
+                    <span class="mr-2" style="color: var(--accent-pink);">👥</span>
                     <span class="font-semibold">Hosted by:</span>
-                    <span class="ml-2 text-cyan-200">Jem & Steele</span>
+                    <span class="ml-2" style="color: var(--accent-cyan);">Jem & Steele</span>
                 </div>
                 <div class="flex items-center">
-                    <span class="text-pink-400 mr-2">🕒</span>
+                    <span class="mr-2" style="color: var(--accent-pink);">🕒</span>
                     <span class="font-semibold">When:</span>
-                    <span class="ml-2 text-cyan-200">Thursday night after your event</span>
+                    <span class="ml-2" style="color: var(--accent-cyan);">Thursday night after your event</span>
                 </div>
                 <div class="flex items-center">
-                    <span class="text-pink-400 mr-2">🏨</span>
+                    <span class="mr-2" style="color: var(--accent-pink);">🏨</span>
                     <span class="font-semibold">Room:</span>
-                    <span id="roomNumber" class="ml-2 text-cyan-200 glow-text">Stay-tuned</span>
+                    <span id="roomNumber" class="ml-2 glow-text" style="color: var(--accent-cyan);">Stay-tuned</span>
                 </div>
             </div>
         </div>
         
         <!-- Venmo Donation Section -->
         <div class="w-full max-w-2xl mx-auto mb-8">
-            <div class="bg-gradient-to-r from-green-900/60 to-emerald-900/60 backdrop-blur-sm p-6 rounded-xl border border-green-500/30 shadow-lg shadow-green-500/20">
-                <h3 class="text-xl font-bold text-green-300 mb-3 text-center">🍹 Help Stock the Bar! 💚</h3>
-                <p class="text-gray-300 text-center mb-4">
+            <div class="backdrop-blur-sm p-6 rounded-xl border shadow-lg" style="background: linear-gradient(to right, var(--green-gradient-start), var(--green-gradient-end)); border-color: rgba(34, 197, 94, 0.3); box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.2);">
+                <h3 class="text-xl font-bold mb-3 text-center" style="color: #22c55e;">🍹 Help Stock the Bar! 💚</h3>
+                <p class="text-center mb-4" style="color: var(--text-secondary);">
                     Want to help us keep the drinks flowing? Any contribution helps cover the party supplies!
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-3">
                     <a href="https://venmo.com/jemkegawa?txn=pay&note=Vegas%20Room%20Party%202025" target="_blank" rel="noopener noreferrer"
-                       class="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full font-bold text-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-green-500/30 pulse-hover">
+                       class="px-6 py-3 rounded-full font-bold text-lg text-white transition-all duration-300 transform hover:scale-105 shadow-lg pulse-hover" style="background: linear-gradient(to right, #22c55e, #10b981); box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.3);">
                         💚 Venmo
                     </a>
                     <a href="https://paypal.me/manofsteele86" target="_blank" rel="noopener noreferrer"
-                       class="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full font-bold text-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-500/30 pulse-hover">
+                       class="px-6 py-3 rounded-full font-bold text-lg text-white transition-all duration-300 transform hover:scale-105 shadow-lg pulse-hover" style="background: linear-gradient(to right, var(--blue-gradient-start), var(--blue-gradient-end)); box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);">
                         💙 PayPal
                     </a>
                 </div>
-                <p class="text-xs text-gray-400 text-center mt-2">
+                <p class="text-xs text-center mt-2" style="color: var(--text-secondary); opacity: 0.8;">
                     @jemkegawa • paypal.me/manofsteele86 • Completely optional!
                 </p>
             </div>
@@ -149,7 +257,7 @@
         
         <!-- Drinks Menu Section -->
         <div class="w-full max-w-4xl mx-auto mb-8">
-            <h2 class="text-3xl md:text-4xl font-bold mb-8 font-['Permanent_Marker'] text-center text-cyan-300">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8 font-['Permanent_Marker'] text-center" style="color: var(--accent-cyan);">
                 🍹 Drink Menu 🍸
             </h2>
             
@@ -160,6 +268,44 @@
     </main>
 
     <script>
+        // Theme Management
+        const THEME_STORAGE_KEY = 'vegasPartyTheme';
+        
+        // Initialize theme on page load
+        function initTheme() {
+            const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'dark';
+            applyTheme(savedTheme);
+        }
+        
+        // Apply theme to the document
+        function applyTheme(theme) {
+            const html = document.documentElement;
+            const themeIcon = document.getElementById('themeIcon');
+            const themeLabel = document.getElementById('themeLabel');
+            
+            if (theme === 'light') {
+                html.setAttribute('data-theme', 'light');
+                themeIcon.textContent = '☀️';
+                themeLabel.textContent = 'Light';
+            } else {
+                html.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                themeLabel.textContent = 'Dark';
+            }
+            
+            localStorage.setItem(THEME_STORAGE_KEY, theme);
+        }
+        
+        // Toggle between light and dark themes
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            applyTheme(newTheme);
+        }
+        
+        // Initialize theme immediately
+        initTheme();
+        
         // API endpoints
         const API_URL = 'https://68700fea7ca4d06b34b5dfa1.mockapi.io/api/improving-vegas/2025/rsvps';
         const ROOM_API_URL = 'https://68700fea7ca4d06b34b5dfa1.mockapi.io/api/improving-vegas/2025/room';
@@ -403,13 +549,16 @@
                 const categoryName = categoryNames[category] || category;
                 
                 menuHTML += `
-                    <div class="bg-black/40 backdrop-blur-sm rounded-2xl border border-pink-500/30 shadow-lg shadow-pink-500/20 overflow-hidden">
-                        <button class="w-full px-6 py-4 text-left bg-gradient-to-r from-purple-900/60 to-pink-900/60 hover:from-purple-800/70 hover:to-pink-800/70 transition-all duration-300 flex justify-between items-center" 
+                    <div class="backdrop-blur-sm rounded-2xl border shadow-lg overflow-hidden" style="background: var(--card-bg); border-color: var(--card-border); box-shadow: 0 10px 15px -3px var(--card-shadow);">
+                        <button class="w-full px-6 py-4 text-left transition-all duration-300 flex justify-between items-center" 
+                                style="background: linear-gradient(to right, var(--category-bg), var(--category-bg-end));"
+                                onmouseover="this.style.opacity='0.9'" 
+                                onmouseout="this.style.opacity='1'"
                                 onclick="toggleAccordion('category-${categoryIndex}')">
-                            <span class="text-xl md:text-2xl font-bold text-cyan-300">
+                            <span class="text-xl md:text-2xl font-bold" style="color: var(--accent-cyan);">
                                 ${categoryIcon} ${categoryName}
                             </span>
-                            <span class="accordion-arrow text-pink-400 text-2xl" id="arrow-category-${categoryIndex}">▼</span>
+                            <span class="accordion-arrow text-2xl" style="color: var(--accent-pink);" id="arrow-category-${categoryIndex}">▼</span>
                         </button>
                         <div class="accordion-content" id="category-${categoryIndex}">
                             <div class="p-4 space-y-3">
@@ -470,13 +619,16 @@
                 const accordionId = `base-${categoryIndex}-${baseIndex}`;
                 
                 html += `
-                    <div class="bg-gray-900/50 rounded-xl border border-cyan-500/20 overflow-hidden">
-                        <button class="w-full px-4 py-3 text-left bg-gradient-to-r from-gray-800/60 to-gray-700/60 hover:from-gray-700/70 hover:to-gray-600/70 transition-all duration-300 flex justify-between items-center" 
+                    <div class="rounded-xl border overflow-hidden" style="background: var(--sub-accordion-bg); border-color: var(--sub-accordion-border);">
+                        <button class="w-full px-4 py-3 text-left transition-all duration-300 flex justify-between items-center" 
+                                style="background: var(--sub-accordion-bg);"
+                                onmouseover="this.style.opacity='0.9'" 
+                                onmouseout="this.style.opacity='1'"
                                 onclick="toggleAccordion('${accordionId}')">
-                            <span class="text-lg font-semibold text-pink-300">
+                            <span class="text-lg font-semibold" style="color: var(--accent-pink);">
                                 ${baseIcon} ${baseName} (${drinks.length})
                             </span>
-                            <span class="accordion-arrow text-cyan-400" id="arrow-${accordionId}">▼</span>
+                            <span class="accordion-arrow" style="color: var(--accent-cyan);" id="arrow-${accordionId}">▼</span>
                         </button>
                         <div class="accordion-content" id="${accordionId}">
                             <div class="p-3">
@@ -495,12 +647,15 @@
         // Generate individual drink cards
         function generateDrinkCards(drinks) {
             return drinks.map(drink => `
-                <div class="bg-gradient-to-br from-purple-900/40 to-pink-900/40 rounded-lg p-4 border border-pink-400/20 hover:border-pink-400/40 transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/20">
-                    <h4 class="text-lg font-bold text-cyan-100 mb-3">${drink.name}</h4>
-                    <ol class="text-gray-300 space-y-1 text-sm text-left">
+                <div class="rounded-lg p-4 border transition-all duration-300" 
+                     style="background: linear-gradient(to bottom right, var(--drink-card-bg), var(--drink-card-bg-end)); border-color: var(--card-border);"
+                     onmouseover="this.style.borderColor='var(--accent-pink)'; this.style.boxShadow='0 10px 15px -3px var(--card-shadow)';" 
+                     onmouseout="this.style.borderColor='var(--card-border)'; this.style.boxShadow='none';">
+                    <h4 class="text-lg font-bold mb-3" style="color: var(--accent-cyan);">${drink.name}</h4>
+                    <ol class="space-y-1 text-sm text-left" style="color: var(--text-secondary);">
                         ${drink.steps.map((step, index) => `
                             <li class="flex items-start">
-                                <span class="inline-block w-6 h-6 bg-pink-500 text-white text-xs font-bold rounded-full flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">${index + 1}</span>
+                                <span class="inline-block w-6 h-6 text-white text-xs font-bold rounded-full flex items-center justify-center mr-2 mt-0.5 flex-shrink-0" style="background: var(--accent-pink);">${index + 1}</span>
                                 <span>${step}</span>
                             </li>
                         `).join('')}
