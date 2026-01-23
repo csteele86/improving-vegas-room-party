@@ -1,0 +1,17 @@
+{
+  "name": "improving-vegas-room-party",
+  "version": "1.0.0",
+  "description": "This is a collection of static sites that have been used to invite people to the annual Improving Vegas Room Party!",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jasmine": "^6.0.0",
+    "jasmine-browser-runner": "^4.0.0",
+    "jsdom": "^27.4.0"
+  }
+}
